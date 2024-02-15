@@ -3,12 +3,6 @@
   hosts: LAB1
   gather_facts: no
 
-  vars:
-    vlans:
-      - { id: 10, name: "Client" }
-      - { id: 20, name: "IoT" }
-      - { id: 30, name: "Server" }
-
   tasks:
     - name: Generate VLAN Configuration
       template:
