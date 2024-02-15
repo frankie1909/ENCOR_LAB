@@ -4,12 +4,19 @@
   gather_facts: no
 
   tasks:
-  - name: Ping Test
-    ios_command:
-      commands:
-        - show ip interface brief
-    register: output
+    - name: Remove IP address from GigabitEthernet1/2
+      ios_config:
+        lines:
+          - no ip address
+        parents: interface GigabitEthernet1/2
+      when: ansible_network_os == 'ios'
 
-  - name: Display Output
-    debug:
-      var: output.stdout_lines
+    - name: Ping Test
+      ios_command:
+        commands:
+          - show ip interface brief
+      register: output
+
+    - name: Display Output
+      debug:
+        var: output.stdout_lines
