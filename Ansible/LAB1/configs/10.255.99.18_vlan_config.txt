@@ -1,0 +1,6 @@
+vlan 10
+    name Client
+vlan 20
+    name IoT
+vlan 30
+    name Server
