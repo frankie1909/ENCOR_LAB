@@ -19,6 +19,14 @@
       tags:
         - ping_test
 
+    - name: Save Configuration
+      ios_command:
+        commands:
+          - write memory
+      register: write_memory_output
+      tags:
+        - write_memory
+
     - name: Display Output
       debug:
         var: output.stdout_lines
