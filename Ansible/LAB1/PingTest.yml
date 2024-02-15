@@ -16,6 +16,8 @@
         commands:
           - show ip interface brief
       register: output
+      tags:
+        - ping_test
 
     - name: Display Output
       debug:
