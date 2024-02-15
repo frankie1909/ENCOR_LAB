@@ -2,3 +2,8 @@ ansible_user: admin
 ansible_ssh_pass: Cisco123!
 ansible_network_os: ios
 ansible_connection: network_cli
+
+vlans:
+  - { id: 10, name: "Client" }
+  - { id: 20, name: "IoT" }
+  - { id: 30, name: "Server" }
