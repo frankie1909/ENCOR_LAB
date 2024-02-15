@@ -1,5 +1,0 @@
----
-vlans:
-  - { id: 10, name: "Client" }
-  - { id: 20, name: "IoT" }
-  - { id: 30, name: "printer" }
