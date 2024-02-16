@@ -1,0 +1,12 @@
+---
+- name: Configure Layer 3 Interfaces on Switches
+  hosts: switches
+  gather_facts: no
+
+  tasks:
+    - name: Configure IP on Interfaces
+      ios_config:
+        lines:
+          - ip address {{ layer3_interfaces[inventory_hostname][0].ip_address }} {{ layer3_interfaces[inventory_hostname][0].subnet_mask }}
+        parents: interface {{ layer3_interfaces[inventory_hostname][0].interface }}
+      when: ansible_network_os == 'ios'
