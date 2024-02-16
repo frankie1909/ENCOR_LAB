@@ -48,6 +48,8 @@
         commands:
           - show ip interface brief
       register: output
+      debug:
+        var: output.stdout_lines
       tags:
         - ping_test
 
