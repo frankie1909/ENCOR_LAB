@@ -32,7 +32,7 @@
         var: output.stdout_lines
 
 - name: Ping Test
-  hosts: Router
+  hosts: Router1
   gather_facts: no
 
   tasks:
