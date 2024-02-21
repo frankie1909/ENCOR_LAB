@@ -8,3 +8,12 @@
       cisco.ios.ios_linkagg:
         group: 10
         state: present
+
+        
+    - name: Set link aggregation group to members
+      cisco.ios.ios_linkagg:
+      group: 10
+      mode: active
+      members:
+        - GigabitEthernet1/2
+        - GigabitEthernet1/3
