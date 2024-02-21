@@ -3,7 +3,7 @@
   hosts: switches
   gather_facts: no
 
-  task:
+  tasks:
     - name: Deploy Port-Channel configuration
       cisco.ios.ios_config:
         src: templates/port_channel.j2
