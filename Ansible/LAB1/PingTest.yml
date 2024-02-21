@@ -2,15 +2,8 @@
 - name: Check Cisco Switch Connectivity
   hosts: LAB1
   gather_facts: no
-
+  
   tasks:
-    - name: Remove IP address from GigabitEthernet1/2
-      ios_config:
-        lines:
-          - no ip address
-        parents: interface GigabitEthernet1/2
-      when: ansible_network_os == 'ios'
-
     - name: Ping Test
       ios_command:
         commands:
@@ -18,48 +11,6 @@
       register: output
       tags:
         - ping_test
-
-    - name: Save Configuration
-      ios_command:
-        commands:
-          - write memory
-      register: write_memory_output
-      tags:
-        - write_memory
-
-    - name: Display Output
-      debug:
-        var: output.stdout_lines
-
-- name: Ping Test
-  hosts: Router1
-  gather_facts: no
-
-  tasks:
-    - name: Remove IP address from GigabitEthernet1/2
-      ios_config:
-        lines:
-          - no ip address
-        parents: interface GigabitEthernet1/2
-      when: ansible_network_os == 'ios'
-
-    - name: Ping Test
-      ios_command:
-        commands:
-          - show ip interface brief
-      register: output
-      debug:
-        var: output.stdout_lines
-      tags:
-        - ping_test
-
-    - name: Save Configuration
-      ios_command:
-        commands:
-          - write memory
-      register: write_memory_output
-      tags:
-        - write_memory
 
     - name: Display Output
       debug:
