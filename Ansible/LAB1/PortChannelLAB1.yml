@@ -1,6 +1,6 @@
 ---
 - name: Configure LACP Port-Channels on Cisco IOS Switches LAB1
-  hosts: switches
+  hosts: LAB1
   gather_facts: no
 
   tasks:
