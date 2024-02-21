@@ -1,0 +1,6 @@
+port_channel:
+  number: 1
+  mode: active
+  ports:
+    - GigabitEthernet1/2
+    - GigabitEthernet1/3
