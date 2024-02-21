@@ -1,0 +1,10 @@
+---
+- name: Configure LACP Port-Channels on Cisco IOS Switches LAB1
+  hosts: switches
+  gather_facts: no
+
+  task:
+    - name: Deploy Port-Channel configuration
+      cisco.ios.ios_config:
+        src: templates/port_channel.j2
+        backup: yes
