@@ -1,6 +1,11 @@
 ---
 - name: Apply hostname
-  ios_hostname:
-    config:
-      hostname: "{{ hostname }}"
-    state: merged
+  hosts: LAB1
+  gather_facts: no
+
+  tasks:
+    name: set Hostname
+      cisco.ios.ios_hostname:
+        config:
+          hostname: "{{ hostname }}"
+        state: merged
