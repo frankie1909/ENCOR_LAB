@@ -1,6 +1,6 @@
 ---
 - name: Apply hostname
-  cisco.ios.ios_hostname:
+  ios_hostname:
     config:
       hostname: "{{ hostname }}"
     state: merged
