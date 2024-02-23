@@ -11,8 +11,8 @@
 
     - name: Create
       cisco.ise.tacacs_profile:
-        ise_hostename: "{{ise_hostname}}"
-        ise_username: "{{ise_username}}"
+        ise_hostename: "CCA_ATWV_ISE01" # Direkt eingefügt für den test
+        ise_username: "{{ ise_username }}"
         ise_password: "{{ise_password}}"
         ise_verify: "{{ise_verify}}"
         state: present
