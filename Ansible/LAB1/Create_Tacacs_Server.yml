@@ -4,6 +4,11 @@
   gather_facts: no
 
   tasks:
+    - name: Debug ise_hostname
+      debug:
+        msg: "ise hostname is {{ise_hostname}}"
+
+
     - name: Create
       cisco.ise.tacacs_profile:
         ise_hostename: "{{ise_hostname}}"
