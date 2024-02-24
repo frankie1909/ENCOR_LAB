@@ -1,0 +1,28 @@
+---
+- name: Create ISE Tacas Connectino
+  hosts: LAB1
+  gather_facts: no
+
+  tasks:
+    - name: Debug ise_hostname
+      debug:
+        msg: "ise hostname is {{ise_hostname}}"
+
+
+    - name: Create
+      cisco.ise.tacacs_profile:
+        ise_hostename: "CCA_ATWV_ISE01" # Direkt eingefügt für den test
+        ise_username: "{{ ise_username }}"
+        ise_password: "{{ise_password}}"
+        ise_verify: "{{ise_verify}}"
+        state: present
+        description: "ISE Tacacs Server"
+        name: "CCA_ATWV_ISE01"
+        sessionAttributes:
+          sessionAttributeList:
+            - name: "service-type"
+              type: "Mandatory"
+              value: "Administrative"
+            - name: "shell:priv-lvl"
+              type: "Mandatory"
+              value: "15"

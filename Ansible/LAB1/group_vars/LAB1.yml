@@ -3,7 +3,16 @@ ansible_ssh_pass: Cisco123!
 ansible_network_os: ios
 ansible_connection: network_cli
 
+
+#ISE Tacacs Connection
+ise_hostname: CCA_ATWV_ISE01
+ise_username: admin
+ise_password: supersecurepassword
+ise_verify: false
+
 vlans:
   - { id: 10, name: "Client" }
   - { id: 20, name: "IoT" }
   - { id: 30, name: "printer" }
+
+

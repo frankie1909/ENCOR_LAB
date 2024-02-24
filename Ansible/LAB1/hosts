@@ -1,2 +1,2 @@
 [LAB1]
-10.255.99.18
+switch1 ansible_host=10.0.99.1

@@ -1,0 +1,18 @@
+---
+- name: Configure LACP Port-Channels on Cisco IOS Switches LAB1
+  hosts: LAB1
+  gather_facts: no
+
+  tasks:
+    - name: Etherchannel Group 10 löschen
+      cisco.ios.ios_linkagg:
+        group: 10
+        state: absent
+
+    - name: Create link aggregation group
+      cisco.ios.ios_linkagg:
+        group: 20
+        state: present
+        mode: active
+        members: "{{ lag_members }}"
+     

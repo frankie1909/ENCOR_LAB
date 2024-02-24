@@ -1,0 +1,12 @@
+interface Port-channel{{ port_channel.number }}
+    description LACP Port-channel
+    switchport mode trunk
+    lacp max-bundle 2
+    lacp min-bundle 2
+!
+{% for port in port_channel.ports %}
+interface {{ port }}
+    switchport mode trunk
+    channel-group {{ port_channel.number}} mode {{ port_channel.mode}}
+!
+{% endfor %}    
