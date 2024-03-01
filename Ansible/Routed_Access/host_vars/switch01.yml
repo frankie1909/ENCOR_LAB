@@ -1,0 +1,13 @@
+vlan_id: 10
+vlan_name: "ClientsVLAN_Switch01"
+svi_ip: "10.10.10.1"
+svi_subnet: "255.255.255.0"
+
+etherchannel:
+  id: 1
+  mode: active
+  members:
+    - GigabitEthernet0/0
+    - GigabitEthernet0/1
+  ip_address: 10.255.5.2
+  subnet_mask: 255.255.255.252
