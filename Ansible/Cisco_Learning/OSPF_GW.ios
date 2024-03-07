@@ -1,0 +1,21 @@
+en
+  show ip ospf neighbor 
+  show ip ospf interface 
+  show ip ospf interface e0/0
+  show ip protocols 
+  show ip route ospf
+
+
+!show default route and ping default GW
+  show ip route st
+  ping 209.165.201.1
+
+
+!set ASBR - Typ5 LSAs command default-information originate
+conf t
+router ospf 1
+  default-information originate 
+  do show ip route
+  do 
+  do show ip ospf
+  do show ip ospf database external 0.0.0.0

@@ -1,0 +1,10 @@
+R1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+R1(config)#ipv6 unsi
+R1(config)#ipv6 uni 
+R1(config)#ipv6 unicast-routing 
+R1(config)#ipv6 router ospf 1
+R1(config-rtr)#router-id 1.1.1.1
+R1(config-rtr)#ass
+R1(config-rtr)#pass
+R1(config-rtr)#passive-interface lo0
