@@ -1,0 +1,42 @@
+---
+name: test_lab API
+description: Arista viosl2 leaf-spine lab
+path: "/"
+nodes:
+  - name: leaf01
+    template: viosl2
+    image: viosl2-adventerprisek9-m.SSA.high_iron_20200929
+    node_type: qemu
+    left: 50
+    top: 135
+    configuration:
+      file: configs/test_leaf01.cfg
+  - name: leaf02
+    template: viosl2
+    image: viosl2-adventerprisek9-m.SSA.high_iron_20200929
+    node_type: qemu
+    left: 200
+    top: 135
+    configuration:
+      template: iosl2.j2
+      vars:
+        hostname: leaf02
+        management_address: 10.10.10.1
+        management_vlan_id: 199
+links:
+  network:
+    - { "src": "leaf01", "src_label": "Mgmt1", "dst": "vCloud" }
+    - { "src": "leaf02", "src_label": "Mgmt1", "dst": "vCloud" }
+
+    - {
+        "src": "leaf01",
+        "src_label": "Eth3",
+        "dst": "spine01",
+        "dst_label": "Eth1",
+      }
+    - {
+        "src": "leaf02",
+        "src_label": "Eth3",
+        "dst": "spine01",
+        "dst_label": "Eth2",
+      }

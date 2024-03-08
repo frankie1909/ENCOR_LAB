@@ -1,0 +1,30 @@
+{% if hostname is defined and hostname %}
+hostname {{ hostname }}
+{% else %}
+hostname ztp-{{ management_address }}
+{% endif %}
+!
+no aaa new-model
+!
+username admin privilege 15 secret Cisco123!
+username cvpadmin privilege 15 secret Cisco123!
+!
+{% if management_vlan_id is defined and management_vlan_id %}
+vlan {{ management_vlan_id }}
+   name MANAGEMENT
+!
+{% endif %}
+{% if management_address is defined and management_address %}
+interface Vlan{{ management_vlan_id }}
+   description MANAGEMENT
+   ip address {{ management_address }} {{ subnet_mask }}
+   no shutdown
+!
+{% endif %}
+ip default-gateway {{ gateway }}
+!
+line vty 0 4
+ login local
+ transport input all
+!
+end
