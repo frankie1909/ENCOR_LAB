@@ -3,4 +3,4 @@ vlan 10
 vlan 20
     name IoT
 vlan 30
-    name Server
+    name printer
