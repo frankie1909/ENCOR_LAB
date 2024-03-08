@@ -1,0 +1,11 @@
+ en
+  show ip ospf neighbor
+  show ip ospf interface ethernet0/0
+  show ip protocols
+  show ip route ospf
+
+!set router OSPF 1 passive-interface default
+conf t
+router ospf 1
+  passive-interface default 
+  no passive-interface Ethernet 0/0

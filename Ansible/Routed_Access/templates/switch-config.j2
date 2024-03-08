@@ -1,0 +1,10 @@
+vlan {{ vlan_id }}
+ name {{ vlan_name }}
+ exit
+interface Vlan{{ vlan_id }}
+ ip address {{ svi_ip }} {{ svi_subnet }}
+ no shutdown
+ exit
+router ospf {{ ospf_process_id }}
+ network {{ svi_ip }} 0.0.0.255 area 0
+ exit

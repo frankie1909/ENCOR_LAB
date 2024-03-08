@@ -1,0 +1,13 @@
+  enable
+  show ip ospf nei
+  show ip protocols 
+  show ip route ospf
+
+conf t
+  ! Set Loopback0 passive-interface (router OSPF 1)
+    router ospf 1
+  passive-interface Loopback 0
+
+  ! Change OSPF cost on interface
+   int e0/0
+  ip ospf cost 500

@@ -1,0 +1,17 @@
+etherchannels:
+  - name: Po1
+    description: "Verbindung zu Switch 1"
+    mode: "on"
+    ip_address: "10.255.5.1"
+    subnet_mask: "255.255.255.252"
+    interfaces:
+      - GigabitEthernet0/0
+      - GigabitEthernet0/1
+  - name: Po2
+    description: "Verbindung zu Switch 2"
+    mode: "on"
+    ip_address: "10.255.5.5"
+    subnet_mask: "255.255.255.252"
+    interfaces:
+      - GigabitEthernet0/2
+      - GigabitEthernet0/3

@@ -1,0 +1,9 @@
+---
+- name: Konfigurieren des gerouteten Access-Netzwerks
+  hosts: switches
+  gather_facts: no
+  tasks:
+    - name: Deploy VLAN und SVI Konfiguration
+      template:
+        src: templates/switch-config.j2
+        dest: "/tmp/{{ inventory_hostname }}-config.txt"
