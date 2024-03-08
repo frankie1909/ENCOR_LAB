@@ -19,3 +19,6 @@ router ospf 1
   do 
   do show ip ospf
   do show ip ospf database external 0.0.0.0
+
+  router ospf 1
+  auto-cost reference-bandwidth 10000
