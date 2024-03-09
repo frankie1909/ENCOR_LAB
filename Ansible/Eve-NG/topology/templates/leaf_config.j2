@@ -1,0 +1,33 @@
+alias rztp bash echo 'DISABLE=False' > /mnt/flash/zerotouch-config
+hostname {{ hostname }}
+!
+no aaa root
+!
+username admin privilege 15 secret Cisco123!
+!
+vrf definition management
+   description management vrf
+!
+interface Gig0/1
+   description MANAGEMENT
+   vrf forwarding management
+   ip address {{ management_address }} {{ subnet_mask }}
+   no shutdown
+!
+ip route vrf management 0.0.0.0/0 {{ gateway }}
+!
+no ip routing
+no ip routing vrf management
+!
+management api http-commands
+   no shutdown
+   !
+   vrf management
+      no shutdown
+!
+ip ssh version 2
+line vty 0 4
+ transport input ssh
+ login local
+!
+end

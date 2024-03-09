@@ -1,0 +1,38 @@
+name: LAB_IOS1
+description: LAB with IOSvL2 Switches for Management and SSH Configuration
+path: "/"
+nodes:
+  - name: leaf01
+    template: viosl2
+    image: viosl2-adventerprisek9-m.SSA.high_iron_20200929
+    left: 50
+    configuration:
+      template: leaf_config.j2
+      vars:
+        hostname: leaf01
+        management_address: 10.199.1.1
+        subnet_mask: 255.255.255.0
+        gateway: 10.199.1.254
+  - name: leaf02
+    template: viosl2
+    image: viosl2-adventerprisek9-m.SSA.high_iron_20200929
+    left: 200
+    configuration:
+      template: leaf_config.j2
+      vars:
+        hostname: leaf02
+        management_address: 10.199.1.2
+        subnet_mask: 255.255.255.0
+        gateway: 10.199.1.254
+networks:
+  - name: Management
+    network_type: pnet9
+    visibility: 1
+links:
+  network:
+    - src: leaf01
+      src_label: Gig0/1
+      dst: Management
+    - src: leaf02
+      src_label: Gig0/1
+      dst: Management
