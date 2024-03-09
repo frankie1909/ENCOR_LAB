@@ -2,7 +2,7 @@ from evengsdk.client import EvengClient
 from pprint import pprint
 
 
-client = EvengClient("34.32.39.28",
+client = EvengClient("localhost",
                      log_file="test.log", ssl_verify=False)
 # disable warnings for self-signed certificates
 client.disable_insecure_warnings()
@@ -59,7 +59,7 @@ def configure_node_network_settings(client, lab_path, node_name, network_setting
 
 
 def main():
-    host = "34.32.39.28"
+    host = "localhost"
     username = "silvan_adm"
     password = "/tvOZ_D1OG.'#h37g:UV"
     client = setup_eveng_client(host, username, password)
