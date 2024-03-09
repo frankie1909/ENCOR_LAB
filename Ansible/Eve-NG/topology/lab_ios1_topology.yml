@@ -1,4 +1,4 @@
-name: LAB_IOS1
+name: LAB_IOS2
 description: LAB with IOSvL2 Switches for Management and SSH Configuration
 path: "/"
 nodes:
@@ -10,7 +10,7 @@ nodes:
       template: leaf_config.j2
       vars:
         hostname: leaf01
-        management_address: 10.199.1.1
+        management_address: 10.199.2.1
         subnet_mask: 255.255.255.0
         gateway: 10.199.1.254
   - name: leaf02
@@ -21,7 +21,7 @@ nodes:
       template: leaf_config.j2
       vars:
         hostname: leaf02
-        management_address: 10.199.1.2
+        management_address: 10.199.2.2
         subnet_mask: 255.255.255.0
         gateway: 10.199.1.254
 networks:
@@ -31,8 +31,8 @@ networks:
 links:
   network:
     - src: leaf01
-      src_label: Gig0/1
+      src_label: Gi0/1
       dst: Management
     - src: leaf02
-      src_label: Gig0/1
+      src_label: Gi0/1
       dst: Management
