@@ -1,4 +1,4 @@
-name: LAB_IOS2
+name: LAB_IOS2 - with VLAN
 description: LAB with IOSvL2 Switches for Management and SSH Configuration
 path: "/"
 nodes:

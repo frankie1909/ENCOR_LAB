@@ -1,6 +1,6 @@
 hostname {{ hostname }}
 !
-no aaa
+no aaa new-model
 !
 username admin privilege 15 secret Cisco123!
 !
@@ -21,7 +21,15 @@ interface Gig0/1
    switchport access vlan 199
    no shutdown
 !
-no ip routing
+no ip domain-lookup
+ip domain-name lab.slu
+!
+ip http secure-server
+!
+ip route 0.0.0.0 0.0.0.0 Vlan199
+ip ssh version 2
+ip ssh server algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+ip ssh client algorithm encryption aes128-ctr aes192-ctr aes256-ctr
 !
 management api http-commands
    no shutdown
@@ -29,6 +37,7 @@ management api http-commands
 !
 ip ssh version 2
 line vty 0 4
+ logging synchronous
  transport input ssh
  login local
 !
