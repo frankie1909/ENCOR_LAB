@@ -1,0 +1,35 @@
+hostname {{ hostname }}
+!
+no aaa
+!
+username admin privilege 15 secret Cisco123!
+!
+vrf definition management
+   description management vrf
+!
+vlan 199
+   name MANAGEMENT
+!
+interface Vlan199
+   description MANAGEMENT_VLAN
+   ip address {{ management_address }} {{ subnet_mask }}
+   no shutdown
+!
+interface Gig0/1
+   description MANAGEMENT
+   switchport mode access
+   switchport access vlan 199
+   no shutdown
+!
+no ip routing
+!
+management api http-commands
+   no shutdown
+   !
+!
+ip ssh version 2
+line vty 0 4
+ transport input ssh
+ login local
+!
+end
