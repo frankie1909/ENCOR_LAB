@@ -1,0 +1,86 @@
+name: CCNP LAB 001
+description: VLANs, VTP, DTP and STP
+path: "/"
+nodes:
+  - name: DLS1
+    template: viosl2
+    image: viosl2-adventerprisek9-m.SSA.high_iron_20200929
+    left: 50
+    configuration:
+      template: ios_config.j2
+      vars:
+        hostname: DLS1
+        management_address: 10.199.1.1
+        subnet_mask: 255.255.255.0
+        gateway: 10.199.1.254
+  - name: DLS2
+    template: viosl2
+    image: viosl2-adventerprisek9-m.SSA.high_iron_20200929
+    left: 200
+    configuration:
+      template: ios_config.j2
+      vars:
+        hostname: DLS2
+        management_address: 10.199.1.2
+        subnet_mask: 255.255.255.0
+        gateway: 10.199.1.254
+  - name: ALS1
+    template: viosl2
+    image: viosl2-adventerprisek9-m.SSA.high_iron_20200929
+    left: 200
+    configuration:
+      template: ios_config.j2
+      vars:
+        hostname: ALS1
+        management_address: 10.199.1.3
+        subnet_mask: 255.255.255.0
+        gateway: 10.199.1.254
+  - name: ALS2
+    template: viosl2
+    image: viosl2-adventerprisek9-m.SSA.high_iron_20200929
+    left: 200
+    configuration:
+      template: ios_config.j2
+      vars:
+        hostname: ALS2
+        management_address: 10.199.1.4
+        subnet_mask: 255.255.255.0
+        gateway: 10.199.1.254
+networks:
+  - name: Management
+    network_type: pnet9
+    visibility: 1
+links:
+  network:
+    - src: DLS1
+      src_label: Gi0/1
+      dst: Management
+    - src: DLS2
+      src_label: Gi0/1
+      dst: Management
+    - src: ALS1
+      src_label: Gi0/1
+      dst: Management
+    - src: ALS2
+      src_label: Gi0/1
+      dst: Management
+    - src: DLS1
+      src_label: Gi0/2
+      dst: DLS2
+      dst_label: Gi0/2
+    - src: DLS2
+      src_label: Gi0/3
+      dst: ALS2
+      dst_label: Gi0/3
+    - src: DLS1
+      src_label: Gi0/3
+      dst: ALS1
+      dst_label: Gi0/3
+    - src: DLS2
+      src_label: Gi0/4
+      dst: ALS1
+      dst_label: Gi0/4
+    - src: DLS1
+      src_label: Gi0/4
+      dst: ALS2
+      dst_label: Gi0/4
