@@ -1,0 +1,19 @@
+---
+- name: Check if hosts in LAB1 are prepared for RESTCONF
+  hosts: LAB1
+  gather_facts: no
+  
+  tasks:
+    - name: Check if RESTCONF is enabled
+      uri:
+        url: "https://{{ inventory_hostname }}/restconf/data"
+        method: GET
+        validate_certs: no  # Deaktiviere Zertifikatsprüfung, falls selbstsignierte Zertifikate verwendet werden
+        headers:
+          Accept: "application/yang-data+json"
+      register: restconf_check
+      ignore_errors: yes  # Ignoriere Fehler, um die Ausführung bei unerreichbaren Hosts fortzusetzen
+
+    - name: Display result
+      debug:
+        msg: "{{ 'RESTCONF is enabled.' if restconf_check.status == 200 else 'RESTCONF is not enabled or host is unreachable.' }}"

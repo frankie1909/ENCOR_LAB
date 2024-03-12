@@ -6,6 +6,7 @@ nodes:
     template: viosl2
     image: viosl2-adventerprisek9-m.SSA.high_iron_20200929
     left: 50
+    top: 135
     configuration:
       template: ios_config.j2
       vars:
@@ -17,6 +18,7 @@ nodes:
     template: viosl2
     image: viosl2-adventerprisek9-m.SSA.high_iron_20200929
     left: 200
+    top: 135
     configuration:
       template: ios_config.j2
       vars:
@@ -27,7 +29,8 @@ nodes:
   - name: ALS1
     template: viosl2
     image: viosl2-adventerprisek9-m.SSA.high_iron_20200929
-    left: 200
+    left: 50
+    top: 475
     configuration:
       template: ios_config.j2
       vars:
@@ -39,6 +42,7 @@ nodes:
     template: viosl2
     image: viosl2-adventerprisek9-m.SSA.high_iron_20200929
     left: 200
+    top: 475
     configuration:
       template: ios_config.j2
       vars:
@@ -52,35 +56,13 @@ networks:
     visibility: 1
 links:
   network:
-    - src: DLS1
-      src_label: Gi0/1
-      dst: Management
-    - src: DLS2
-      src_label: Gi0/1
-      dst: Management
-    - src: ALS1
-      src_label: Gi0/1
-      dst: Management
-    - src: ALS2
-      src_label: Gi0/1
-      dst: Management
-    - src: DLS1
-      src_label: Gi0/2
-      dst: DLS2
-      dst_label: Gi0/2
-    - src: DLS2
-      src_label: Gi0/3
-      dst: ALS2
-      dst_label: Gi0/3
-    - src: DLS1
-      src_label: Gi0/3
-      dst: ALS1
-      dst_label: Gi0/3
-    - src: DLS2
-      src_label: Gi0/4
-      dst: ALS1
-      dst_label: Gi0/4
-    - src: DLS1
-      src_label: Gi0/4
-      dst: ALS2
-      dst_label: Gi0/4
+    - {"src": "DLS1", "src_label": "Gi0/1", "dst": "Management"}
+    - {"src": "DLS2", "src_label": "Gi0/1", "dst": "Management"}
+    - {"src": "ALS1", "src_label": "Gi0/1", "dst": "Management"}
+    - {"src": "ALS2", "src_label": "Gi0/1", "dst": "Management"}
+  node:
+    - {"src": "DLS1", "src_label": "Gi0/2", "dst": "DLS2", "dst_label": "Gi0/2"}
+    - {"src": "DLS1", "src_label": "Gi0/3", "dst": "ALS1", "dst_label": "Gi0/3"}
+    - {"src": "DLS1", "src_label": "Gi1/0", "dst": "ALS2", "dst_label": "Gi1/0"}
+    - {"src": "DLS2", "src_label": "Gi1/1", "dst": "ALS2", "dst_label": "Gi1/1"}
+    - {"src": "DLS2", "src_label": "Gi1/2", "dst": "ALS2", "dst_label": "Gi1/2"}

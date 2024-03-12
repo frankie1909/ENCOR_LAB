@@ -1,0 +1,22 @@
+---
+- name: Apply hostname and configure trunk ports
+  hosts: LAB1
+  gather_facts: no
+
+  vars:
+    trunk_ports:
+      - GigabitEthernet0/2
+      - GigabitEthernet0/3
+
+  tasks:
+    - name: Replaces device configuration with provided configuration
+      cisco.ios.ios_l2_interfaces:
+        config:
+          - name: "{{ item }}"
+            trunk:
+              allowed_vlans: 10,20,30
+              native_vlan: 20
+              pruning_vlans: 10
+              encapsulation: dot1q
+        state: replaced
+      loop: "{{ trunk_ports }}"
