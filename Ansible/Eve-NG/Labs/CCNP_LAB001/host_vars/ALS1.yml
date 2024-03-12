@@ -12,6 +12,6 @@ lag_members:
 hostname: Eve-NG-Ansible_Lab1
 
 trunk_ports:
-  - GigabitEthernet0/2
   - GigabitEthernet0/3
-  - GigabitEthernet1/0
+
+vtp_mode: server
