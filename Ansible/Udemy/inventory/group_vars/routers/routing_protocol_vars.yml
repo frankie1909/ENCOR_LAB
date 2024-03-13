@@ -1,0 +1,8 @@
+ospf_vars:
+  process_id: 1
+  area: 0
+  net: 192.168.100.0
+  wildcard: 0.0.0.255
+
+r1_location: dc1
+r2_location: dc2
