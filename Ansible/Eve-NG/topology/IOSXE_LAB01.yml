@@ -1,26 +1,26 @@
-name: LAB_IOS2 - with VLAN
-description: LAB with IOSvL2 Switches for Management and SSH Configuration
+name: LAB_IOSXE01
+description: Test with IOSXE Image
 path: "/"
 nodes:
-  - name: leaf01
-    template: viosl2
-    image: viosl2-adventerprisek9-m.SSA.high_iron_20200929
+  - name: IOS_XE_LAB01_01
+    template: csr1000v
+    image: csr1000vng-universalk9.16.09.07.Fuji
     left: 50
     configuration:
       template: leaf_config.j2
       vars:
-        hostname: leaf01
+        hostname: IOS_XE_LAB01_01
         management_address: 10.199.2.1
         subnet_mask: 255.255.255.0
         gateway: 10.199.1.254
-  - name: leaf02
-    template: viosl2
-    image: viosl2-adventerprisek9-m.SSA.high_iron_20200929
+  - name: IOS_XE_LAB01_02
+    template: csr1000v
+    image: csr1000vng-universalk9.16.09.07.Fuji
     left: 200
     configuration:
       template: leaf_config.j2
       vars:
-        hostname: leaf02
+        hostname: IOS_XE_LAB01_02
         management_address: 10.199.2.2
         subnet_mask: 255.255.255.0
         gateway: 10.199.1.254
@@ -30,9 +30,9 @@ networks:
     visibility: 1
 links:
   network:
-    - src: leaf01
-      src_label: Gi0/1
+    - src: IOS_XE_LAB01_01
+      src_label: GigabitEthernet1
       dst: Management
-    - src: leaf02
-      src_label: Gi0/1
+    - src: IOS_XE_LAB01_02
+      src_label: GigabitEthernet1
       dst: Management
