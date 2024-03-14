@@ -1,0 +1,13 @@
+---
+- hosts: meraki_servers
+  gather_facts: false
+  tasks:
+    - name: Get Device
+      cisco.meraki.devices_info:
+        meraki_suppress_logging: true
+        organizationId: 575334852396585169 # replace with your organization ID
+      register: result
+
+    - name: Show result
+      ansible.builtin.debug:
+        msg: "{{ result }}"
