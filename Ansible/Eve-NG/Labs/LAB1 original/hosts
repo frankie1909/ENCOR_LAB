@@ -2,3 +2,4 @@
 switch1 ansible_host=10.199.2.1
 Router1 ansible_host=10.199.2.3
 C9k ansible_host=10.199.2.5
+MyRouter=10.199.2.10
