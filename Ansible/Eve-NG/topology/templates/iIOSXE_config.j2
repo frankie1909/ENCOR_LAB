@@ -1,0 +1,33 @@
+hostname {{ hostname }}
+!
+no aaa new-model
+!
+username admin privilege 15 algorithm-type scrypt secret Cisco123!
+!
+interface GigabitEthernet1
+ description MANAGEMENT_INTERFACE
+ ip address {{ management_address }} {{ subnet_mask }}
+ no shutdown
+!
+interface GigabitEthernet2.{{ SwitchMgmtVLAN }}
+ description Switch Management Subinterface
+ encapsulation dot1Q {{ SwitchMgmtVLAN }}
+ ip address {{ SwitchMgmtGateway }} {{ subnet_mask }}
+ no shutdown
+!
+ip routing
+!
+no ip domain-lookup
+ip domain-name lab.slu
+!
+ip http secure-server
+ip ssh version 2
+ip ssh server algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+ip ssh client algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+!
+line vty 0 4
+ logging synchronous
+ transport input ssh
+ login local
+!
+end

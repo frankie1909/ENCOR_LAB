@@ -1,0 +1,79 @@
+name: CCNP LAB IOS Switch C1000V Palo
+description: setup 3 different nodes
+path: "/"
+nodes:
+  - name: DLS1
+    template: viosl2
+    image: viosl2-adventerprisek9-m.SSA.high_iron_20200929
+    left: 50
+    top: 135
+    configuration:
+      template: ios_config.j2
+      vars:
+        hostname: DLS1
+        management_address: 10.199.1.1
+        subnet_mask: 255.255.255.0
+        gateway: 10.199.1.254
+  - name: DLS2
+    template: viosl2
+    image: viosl2-adventerprisek9-m.SSA.high_iron_20200929
+    left: 200
+    top: 135
+    configuration:
+      template: ios_config.j2
+      vars:
+        hostname: DLS2
+        management_address: 10.199.1.2
+        subnet_mask: 255.255.255.0
+        gateway: 10.199.1.254
+  - name: ALS1
+    template: viosl2
+    image: viosl2-adventerprisek9-m.SSA.high_iron_20200929
+    left: 50
+    top: 475
+    configuration:
+      template: ios_config.j2
+      vars:
+        hostname: ALS1
+        management_address: 10.199.1.3
+        subnet_mask: 255.255.255.0
+        gateway: 10.199.1.254
+  - name: ALS2
+    template: viosl2
+    image: viosl2-adventerprisek9-m.SSA.high_iron_20200929
+    left: 200
+    top: 475
+    configuration:
+      template: ios_config.j2
+      vars:
+        hostname: ALS2
+        management_address: 10.199.1.4
+        subnet_mask: 255.255.255.0
+        gateway: 10.199.1.254
+  - name: R1_C1000V
+    template: csr1000vng
+    image: csr1000vng-universalk9.16.09.07.Fuji
+    left: 200
+    top: 675
+    configuration:
+      template: iIOSXE_config.j2
+      vars:
+        hostname: R1_C1000V
+        management_address: 10.255.99.252
+        subnet_mask: 255.255.255.0
+        SwitchMgmtGateway: 10.199.1.254
+networks:
+  - name: Management
+    network_type: pnet9
+    visibility: 1
+links:
+  network:
+    - {"src": "R1_C1000V", "src_label": "Gi1", "dst": "Management"}
+   
+  node:
+    - {"src": "DLS1", "src_label": "Gi0/1", "dst": "R1_C1000V", "dst_label": "Gi2"}
+    - {"src": "DLS1", "src_label": "Gi0/2", "dst": "DLS2", "dst_label": "Gi0/2"}
+    - {"src": "DLS1", "src_label": "Gi0/3", "dst": "ALS1", "dst_label": "Gi0/3"}
+    - {"src": "DLS1", "src_label": "Gi1/0", "dst": "ALS2", "dst_label": "Gi1/0"}
+    - {"src": "DLS2", "src_label": "Gi1/1", "dst": "ALS2", "dst_label": "Gi1/1"}
+    - {"src": "DLS2", "src_label": "Gi1/2", "dst": "ALS2", "dst_label": "Gi1/2"}

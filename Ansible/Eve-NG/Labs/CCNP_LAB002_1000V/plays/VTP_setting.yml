@@ -1,0 +1,24 @@
+---
+- name: Apply VTP mode
+  hosts: LAB1
+  gather_facts: no
+
+  tasks:
+    - name: Load host variables
+      include_vars:
+        file: "../host_vars/{{ inventory_hostname }}.yml"
+        name: host_vars
+  
+    - name: CHANGE VTP MODE
+      ios_config:
+        lines:
+          - vtp mode transparent
+
+          
+    - name: SHOW VTP STATUS
+      ios_command:
+        commands:
+          - show vtp status 
+      register: after_vtp
+    
+    - debug: var=after_vtp.stdout_lines
