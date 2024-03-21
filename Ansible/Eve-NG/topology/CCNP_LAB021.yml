@@ -1,0 +1,61 @@
+name: CCNP LAB0021 EIGRP
+description: EIGRP - Multitechnologies
+path: "/"
+nodes:
+ - name: R1
+   template: csr1000vng
+   image: csr1000vng-universalk9.16.09.07.Fuji
+   left: 200
+   top: 675
+   configuration:
+    template: iIOSXE_config_EIGRP.j2
+    vars:
+      hostname: R1
+      management_address: 10.0.0.1
+      subnet_mask: 255.255.255.252
+ - name: R2
+   template: csr1000vng
+   image: csr1000vng-universalk9.16.09.07.Fuji
+   left: 675
+   top: 675
+   configuration:
+    template: iIOSXE_config_EIGRP.j2
+    vars:
+      hostname: R2
+      management_address: 10.0.0.2
+      subnet_mask: 255.255.255.252
+ - name: R3
+   template: csr1000vng
+   image: csr1000vng-universalk9.16.09.07.Fuji
+   left: 200
+   top: 975
+   configuration:
+    template: iIOSXE_config_EIGRP.j2
+    vars:
+      hostname: R3
+      management_address: 10.0.0.13
+      subnet_mask: 255.255.255.252
+ - name: R4
+   template: csr1000vng
+   image: csr1000vng-universalk9.16.09.07.Fuji
+   left: 675
+   top: 975
+   configuration:
+    template: iIOSXE_config_EIGRP.j2
+    vars:
+      hostname: R4
+      management_address: 10.0.0.14
+      subnet_mask: 255.255.255.252
+networks:
+  - name: Management
+    network_type: pnet9
+    visibility: 1
+links:
+  network:
+    - {"src": "R1", "src_label": "Gi1", "dst": "Management"}
+   
+  node:
+    - {"src": "R1", "src_label": "Gi2", "dst": "R2", "dst_label": "Gi2"}
+    - {"src": "R1", "src_label": "Gi3", "dst": "R4", "dst_label": "Gi3"}
+    - {"src": "R2", "src_label": "Gi3", "dst": "R3", "dst_label": "Gi3"}
+    - {"src": "R3", "src_label": "Gi2", "dst": "R4", "dst_label": "Gi2"}
