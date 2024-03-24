@@ -38,7 +38,7 @@ nodes:
  - name: R4
    template: csr1000vng
    image: csr1000vng-universalk9.16.09.07.Fuji
-   left: 675
+   left: 676
    top: 975
    configuration:
     template: iIOSXE_config_EIGRP.j2
