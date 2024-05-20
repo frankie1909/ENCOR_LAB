@@ -7,7 +7,7 @@
     - name: Generate VLAN Configuration
       template:
         src: vlan_config.j2
-        dest: "./configs/{{ inventory_hostname }}_vlan_config.txt"
+        dest: "../configs/{{ inventory_hostname }}_vlan_config.txt"
 
     - name: Apply VLAN Configuration
       ios_config:
