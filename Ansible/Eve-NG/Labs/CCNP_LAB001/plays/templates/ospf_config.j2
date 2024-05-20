@@ -1,0 +1,9 @@
+# plays/templates/ospf_config.j2
+
+router ospf 1
+  router-id {{ router_id }}
+  {% for area, interfaces in areas.items() %}
+  {% for interface in interfaces %}
+  network {{ interface.network }} {{ interface.wildcard }} area {{ area }}
+  {% endfor %}
+  {% endfor %}
