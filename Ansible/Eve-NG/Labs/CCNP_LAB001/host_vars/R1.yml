@@ -11,6 +11,8 @@ lag_members:
 
 hostname: R1
 
+router_id: 1.1.1.1
+
 trunk_ports:
   - GigabitEthernet0/2
   - GigabitEthernet0/3

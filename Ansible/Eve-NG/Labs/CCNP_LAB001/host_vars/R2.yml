@@ -11,6 +11,8 @@ lag_members:
 
 hostname: R2
 
+router_id: 2.2.2.2
+
 trunk_ports:
   - GigabitEthernet0/2
   - Port-channel20
