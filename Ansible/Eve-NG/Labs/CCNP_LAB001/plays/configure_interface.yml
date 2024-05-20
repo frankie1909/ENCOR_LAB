@@ -10,10 +10,28 @@
   tasks:
     - name: Load interface configuration from template
       template:
-        src: templates/Interfaces_R1.j2
+        src: templates/Interfaces.j2
         dest: ../configs/Interfaces_R1.cfg
 
     - name: Apply interface configuration to device
       ios_config:
         src: ../configs/Interfaces_R1.cfg
+        backup: yes
+
+- name: Configure Interface G1/0/1 on R2
+  hosts: R2
+  gather_facts: no
+  vars:
+    interface_name: "GigabitEthernet1/0/1"
+    ip_address: "10.0.1.2"
+    subnet_mask: "255.255.255.248"
+  tasks:
+    - name: Load interface configuration from template
+      template:
+        src: templates/Interfaces.j2
+        dest: ../configs/Interfaces_R2.cfg
+
+    - name: Apply interface configuration to device
+      ios_config:
+        src: ../configs/Interfaces_R2.cfg
         backup: yes
