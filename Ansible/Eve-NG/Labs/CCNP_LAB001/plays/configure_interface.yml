@@ -1,6 +1,6 @@
 # plays/configure_interface.yml
 
-- name: Configure Interface G1/0/1 on R1
+- name: Configure Interface G0/1 on R1
   hosts: R1
   gather_facts: no
   vars:
@@ -18,7 +18,7 @@
         src: ../configs/Interfaces_R1.cfg
         backup: yes
 
-- name: Configure Interface G1/0/1 on R2
+- name: Configure Interface G0/1 on R2
   hosts: R2
   gather_facts: no
   vars:
