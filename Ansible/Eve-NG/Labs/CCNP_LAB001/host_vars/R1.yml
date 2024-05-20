@@ -7,10 +7,11 @@ port_channel:
 
 lag_members:
   - GigabitEthernet1/2
-  - GigabitEthernet1/1
+  - GigabitEthernet1/3
 
-hostname: Eve-NG-Ansible_Lab1
+hostname: R1
 
 trunk_ports:
   - GigabitEthernet0/2
-  - Port-channel20
+  - GigabitEthernet0/3
+  - GigabitEthernet1/0
