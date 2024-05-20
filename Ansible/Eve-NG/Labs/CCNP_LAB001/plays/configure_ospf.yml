@@ -1,7 +1,7 @@
 # plays/configure_ospf.yml
 
 - name: Configure OSPF on routers
-  hosts: routers
+  hosts: LAB1
   gather_facts: no
   vars:
     areas:
