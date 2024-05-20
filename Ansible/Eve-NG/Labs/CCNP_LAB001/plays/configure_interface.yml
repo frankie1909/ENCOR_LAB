@@ -4,7 +4,7 @@
   hosts: R1
   gather_facts: no
   vars:
-    interface_name: "GigabitEthernet1/0/1"
+    interface_name: "GigabitEthernet0/1"
     ip_address: "10.0.1.1"
     subnet_mask: "255.255.255.248"
   tasks:
@@ -22,7 +22,7 @@
   hosts: R2
   gather_facts: no
   vars:
-    interface_name: "GigabitEthernet1/0/1"
+    interface_name: "GigabitEthernet0/1"
     ip_address: "10.0.1.2"
     subnet_mask: "255.255.255.248"
   tasks:
