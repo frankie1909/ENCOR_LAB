@@ -11,5 +11,5 @@
 
     - name: Apply VLAN Configuration
       ios_config:
-        src: "./configs/{{ inventory_hostname }}_vlan_config.txt"
+        src: "../configs/{{ inventory_hostname }}_vlan_config.txt"
       when: ansible_network_os == 'ios'
