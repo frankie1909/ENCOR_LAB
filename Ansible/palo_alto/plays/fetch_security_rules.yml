@@ -1,12 +1,26 @@
 ---
 - name: Fetch all security rules from PAN-OS Firewall
-  hosts: firewall
+  hosts: '{{ target | default("firewall") }}'
+  connection: local
   gather_facts: no
+
+  vars:
+    device:
+      ip_address: '{{ ip_address }}'
+      username: '{{ username | default(omit) }}'
+      password: '{{ password | default(omit) }}'
+      api_key: '{{ api_key | default(omit) }}'
+
+    vsys: 'vsys1'
+    rule_base: 'security'
 
   tasks:
     - name: Fetch all security rules
       paloaltonetworks.panos.panos_op:
-        provider: '{{ provider }}'
+        ip_address: '{{ device.ip_address }}'
+        username: '{{ device.username }}'
+        password: '{{ device.password }}'
+        api_key: '{{ device.api_key }}'
         cmd: 'show running security-policy'
       register: result
 
@@ -16,6 +30,10 @@
         xpath: '/response/result/member'
         content: text
       register: security_rules
+
+    - name: Debug parsed security rules
+      debug:
+        var: security_rules
 
     - name: Convert security rules to Markdown
       ansible.builtin.copy:
