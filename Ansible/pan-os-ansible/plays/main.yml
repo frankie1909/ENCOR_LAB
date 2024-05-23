@@ -1,0 +1,43 @@
+- name: Apply PAN-OS Configuration
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Load interfaces configuration
+      include_vars: config/interfaces.yml
+
+    - name: Load zones configuration
+      include_vars: config/zones.yml
+
+    - name: Load policies configuration
+      include_vars: config/policies.yml
+
+    - name: Configure interfaces
+      paloaltonetworks.panos.panos_interface:
+        provider: "{{ provider }}"
+        state: "present"
+        ip: "{{ item.ip }}"
+        name: "{{ item.name }}"
+        mode: "{{ item.mode }}"
+      loop: "{{ interfaces }}"
+
+    - name: Configure zones
+      paloaltonetworks.panos.panos_zone:
+        provider: "{{ provider }}"
+        state: "present"
+        zone: "{{ item.zone }}"
+        interface: "{{ item.interface }}"
+      loop: "{{ zones }}"
+
+    - name: Configure policies
+      paloaltonetworks.panos.panos_security_rule:
+        provider: "{{ provider }}"
+        state: "present"
+        rule_name: "{{ item.rule_name }}"
+        source_zone: "{{ item.source_zone }}"
+        destination_zone: "{{ item.destination_zone }}"
+        source: "{{ item.source }}"
+        destination: "{{ item.destination }}"
+        application: "{{ item.application }}"
+        action: "{{ item.action }}"
+      loop: "{{ policies }}"

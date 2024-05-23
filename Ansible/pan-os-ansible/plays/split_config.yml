@@ -1,0 +1,42 @@
+- name: Split PAN-OS Configuration
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Load full configuration
+      xml:
+        path: "config/full_config.xml"
+        attribute: ""
+
+    - name: Extract interfaces
+      xml:
+        path: "config/full_config.xml"
+        xpath: "/config/devices/entry/vsys/entry/interface"
+      register: interfaces
+
+    - name: Save interfaces to file
+      copy:
+        content: "{{ interfaces }}"
+        dest: "config/interfaces.yml"
+
+    - name: Extract zones
+      xml:
+        path: "config/full_config.xml"
+        xpath: "/config/devices/entry/vsys/entry/zone"
+      register: zones
+
+    - name: Save zones to file
+      copy:
+        content: "{{ zones }}"
+        dest: "config/zones.yml"
+
+    - name: Extract policies
+      xml:
+        path: "config/full_config.xml"
+        xpath: "/config/devices/entry/vsys/entry/rulebase/security/rules"
+      register: policies
+
+    - name: Save policies to file
+      copy:
+        content: "{{ policies }}"
+        dest: "config/policies.yml"

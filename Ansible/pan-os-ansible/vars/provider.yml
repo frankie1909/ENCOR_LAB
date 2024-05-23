@@ -1,0 +1,5 @@
+provider:
+  ip_address: "10.0.0.11"
+  username: "YOUR_USERNAME"
+  password: "YOUR_PASSWORD"
+  api_key: "YOUR_API_KEY" # Optional if using username/password

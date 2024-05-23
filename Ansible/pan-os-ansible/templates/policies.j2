@@ -1,0 +1,3 @@
+{% for policy in policies %}
+set rulebase security rules {{ policy.rule_name }} from {{ policy.source_zone }} to {{ policy.destination_zone }} source {{ policy.source }} destination {{ policy.destination }} application {{ policy.application }} action {{ policy.action }}
+{% endfor %}

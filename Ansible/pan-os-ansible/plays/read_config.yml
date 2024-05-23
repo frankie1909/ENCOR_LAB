@@ -1,0 +1,15 @@
+- name: Gather PAN-OS Configuration
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Retrieve configuration from PAN-OS device
+      paloaltonetworks.panos.panos_op:
+        provider: "{{ provider }}"
+        cmd: "show config running"
+      register: config_output
+
+    - name: Save configuration to file
+      copy:
+        content: "{{ config_output.stdout }}"
+        dest: "config/full_config.xml"

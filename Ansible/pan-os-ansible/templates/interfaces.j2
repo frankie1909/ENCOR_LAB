@@ -1,0 +1,3 @@
+{% for interface in interfaces %}
+set network interface {{ interface.name }} layer3 ip {{ interface.ip }}
+{% endfor %}
