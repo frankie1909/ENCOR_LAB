@@ -46,4 +46,4 @@
             - **Destination**: {{ rule.member | regex_search('destination ([^\;]+)') }}
             - **Action**: {{ rule.member | regex_search('action (\S+)') }}
           {% endfor %}
-        dest: /path/to/security_rules.md
+        dest: ../configs/security_rules.md
