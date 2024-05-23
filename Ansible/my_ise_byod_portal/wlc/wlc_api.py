@@ -1,4 +1,3 @@
-# wlc/wlc_api.py
 import requests
 from requests.auth import HTTPBasicAuth
 from config import WLC_IP, WLC_USERNAME, WLC_PASSWORD, GUEST_SSID
@@ -15,11 +14,14 @@ def get_headers():
 
 def configure_guest_ssid():
     ssid_data = {
-        "Cisco-IOS-XE-wireless-ssid-cfg:wlan": {
+        "Cisco-IOS-XE-wireless:wlan": {
             "name": GUEST_SSID,
             "identifier": 1,
             "description": "Guest SSID",
             "broadcast-ssid": True,
+            "client-vlan": {
+                "vlan-id": 21
+            },
             "security": {
                 "dot1x": False,
                 "wpa": {
@@ -28,14 +30,13 @@ def configure_guest_ssid():
                 }
             },
             "mac-filtering": False,
-            "interface": "guest-vlan",
+            "interface": "VLAN 21",
             "acl": {
                 "name": "WEB_AUTH_REDIRECT_ACL"
-            },
-            "ip-dhcp-server": "10.0.100.100"
+            }
         }
     }
-    url = f"{BASE_URL}/Cisco-IOS-XE-wireless-ssid-cfg:wlan"
+    url = f"{BASE_URL}/Cisco-IOS-XE-wireless:wlan"
     response = requests.post(url, headers=get_headers(), auth=HTTPBasicAuth(
         WLC_USERNAME, WLC_PASSWORD), json=ssid_data, verify=False)
     return response.json()

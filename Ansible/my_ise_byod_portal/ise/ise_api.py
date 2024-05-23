@@ -18,3 +18,12 @@ def create_byod_portal(data):
     response = requests.post(url, headers=get_headers(), auth=HTTPBasicAuth(
         ISE_USERNAME, ISE_PASSWORD), json=data, verify=False)
     return response.json()
+
+# ise/ise_api.py
+
+
+def get_byod_portal():
+    url = f"{BASE_URL}/portal"
+    response = requests.get(url, headers=get_headers(), auth=HTTPBasicAuth(
+        ISE_USERNAME, ISE_PASSWORD), verify=False)
+    return response.json()

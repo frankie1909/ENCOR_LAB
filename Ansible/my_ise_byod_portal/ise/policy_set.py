@@ -63,7 +63,11 @@ def create_policy():
                                     }
                                 ]
                             },
-                            "profile": "CiscoWebAuth"
+                            "profile": "CiscoWebAuth",
+                            "webAuth": {
+                                "acl": "WEB_AUTH_REDIRECT_ACL",
+                                "redirectUrl": "https://10.0.100.100:8443/guestportal"
+                            }
                         }
                     }
                 ]
