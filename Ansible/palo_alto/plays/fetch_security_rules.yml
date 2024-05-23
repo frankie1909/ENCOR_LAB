@@ -43,7 +43,7 @@
           {% set rule_source = rule_lines[2].split(':', 1)[1].strip() %}
           {% set rule_to = rule_lines[3].split(':', 1)[1].strip() %}
           {% set rule_destination = rule_lines[4].split(':', 1)[1].strip() %}
-          {% set rule_action = rule_lines|select('search', 'action')|list|first.split(':', 1)[1].strip() %}
+          {% set rule_action = (rule_lines | select("search", "action") | list)[0].split(':', 1)[1].strip() %}
           | {{ rule_name }} | {{ rule_from }} | {{ rule_source }} | {{ rule_to }} | {{ rule_destination }} | {{ rule_action }} |
           {% endfor %}
         dest: ../configs/security_rules.md
