@@ -1,0 +1,13 @@
+- name: Test connection to PAN-OS Firewall
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Retrieve facts from PAN-OS device
+      paloaltonetworks.panos.panos_facts:
+        provider: '{{ provider }}'
+      register: panos_facts
+
+    - name: Display PAN-OS facts
+      debug:
+        var: panos_facts
