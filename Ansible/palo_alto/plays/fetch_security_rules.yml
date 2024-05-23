@@ -48,8 +48,9 @@
               lines = rule_text.strip().split('\n')
               rule['name'] = lines[0].split(';')[0].strip('" ')
               for line in lines[1:]:
-                  key, value = line.split(':', 1)
-                  rule[key.strip()] = value.strip()
+                  if ':' in line:
+                      key, value = line.split(':', 1)
+                      rule[key.strip()] = value.strip()
               rules.append(rule)
 
           md_table = "| Rule Name | From Zone | To Zone | Source | Destination | Application/Service | Action |\n"
@@ -69,3 +70,7 @@
       copy:
         content: "{{ md_output.stdout }}"
         dest: ../configs/security_rules.md
+
+
+
+        
