@@ -19,9 +19,9 @@
       register: result
 
     - name: Parse security rules XML
-      xml:
+      community.general.xml:
         xmlstring: '{{ result.stdout_xml }}'
-        xpath: '/response/result/rule-base/entry/rules/entry'
+        xpath: '/response/result/member'
         content: text
       register: rules
 
@@ -31,7 +31,7 @@
           | Rule Name | Source Zone | Destination Zone | Source Address | Destination Address | Action |
           |-----------|-------------|------------------|----------------|---------------------|--------|
           {% for rule in rules.matched %}
-          | {{ rule['name'] }} | {{ rule['from']['member'] | join(', ') }} | {{ rule['to']['member'] | join(', ') }} | {{ rule['source']['member'] | join(', ') }} | {{ rule['destination']['member'] | join(', ') }} | {{ rule['action'] }} |
+          | {{ rule.split(';')[0].strip('" ') }} | {{ rule.split('from')[1].split(';')[0].strip() }} | {{ rule.split('to')[1].split(';')[0].strip() }} | {{ rule.split('source')[1].split(';')[0].strip('[] ') }} | {{ rule.split('destination')[1].split(';')[0].strip() }} | {{ rule.split('action')[1].split(';')[0].strip() }} |
           {% endfor %}
 
     - name: Save security rules to Markdown file
