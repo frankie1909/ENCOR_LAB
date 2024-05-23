@@ -31,11 +31,41 @@
         content: text
       register: security_rules
 
-    - name: Convert security rules to Markdown table
-      set_fact:
-        markdown_table: |
-          | Rule Name | From Zone | To Zone | Source | Destination | Application/Service | Action |
-          |-----------|-----------|---------|--------|-------------|----------------------|--------|
-          {% for rule in security_rules.matches %}
-          | {{ rule.member.split(';')[0].strip() }} | {{ (rule.member.split(';')[1].split()[1]).strip() }} | {{ (rule.member.split(';')[1].split()[3]).strip() }} | {{ (rule.member.split(';')[2].split('[')[1].split(']')[0]).strip() }} | {{ (rule.member.split(';')[3].split()[1]).strip() }} | {{ (rule.member.split(';')[4].split('[')[1].split(']')[0]).strip() }} | {{ rule.member.split(';')[5].split()[1].strip() }} |
-          {% endfor %}
+    - name: Create Python script to convert XML to Markdown
+      copy:
+        dest: /tmp/xml_to_md.py
+        content: |
+          import xml.etree.ElementTree as ET
+          import sys
+
+          xml_data = sys.stdin.read()
+          root = ET.fromstring(xml_data)
+
+          rules = []
+          for member in root.findall('.//member'):
+              rule = {}
+              rule_text = member.text
+              lines = rule_text.strip().split('\n')
+              rule['name'] = lines[0].split(';')[0].strip('" ')
+              for line in lines[1:]:
+                  key, value = line.split(':', 1)
+                  rule[key.strip()] = value.strip()
+              rules.append(rule)
+
+          md_table = "| Rule Name | From Zone | To Zone | Source | Destination | Application/Service | Action |\n"
+          md_table += "|-----------|-----------|---------|--------|-------------|----------------------|--------|\n"
+          for rule in rules:
+              md_table += f"| {rule['name']} | {rule.get('from', 'N/A')} | {rule.get('to', 'N/A')} | {rule.get('source', 'N/A')} | {rule.get('destination', 'N/A')} | {rule.get('application/service', 'N/A')} | {rule.get('action', 'N/A')} |\n"
+
+          print(md_table)
+
+    - name: Run Python script to generate Markdown table
+      command: python3 /tmp/xml_to_md.py
+      args:
+        stdin: '{{ result.stdout_xml }}'
+      register: md_output
+
+    - name: Write Markdown table to file
+      copy:
+        content: "{{ md_output.stdout }}"
+        dest: ../configs/security_rules.md
