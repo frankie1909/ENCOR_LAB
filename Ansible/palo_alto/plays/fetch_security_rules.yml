@@ -42,13 +42,12 @@
           # Function to parse rule details from text
           def parse_rule_details(rule_text):
               details = {}
-              for line in rule_text.strip().split('\n'):
+              lines = rule_text.strip().split(';')
+              details['name'] = lines[0].strip('"')
+              for line in lines[1:]:
                   if ':' in line:
                       key, value = line.split(':', 1)
                       details[key.strip()] = value.strip()
-                  else:
-                      last_key = list(details.keys())[-1]
-                      details[last_key] += ' ' + line.strip()
               return details
 
           # Prepare Markdown table
@@ -57,7 +56,8 @@
 
           # Parse each rule
           for member in root.findall('.//member'):
-              rule = parse_rule_details(member.text)
+              rule_text = member.text
+              rule = parse_rule_details(rule_text)
               md_table += f"| {rule.get('name', 'N/A')} | {rule.get('from', 'N/A')} | {rule.get('to', 'N/A')} | {rule.get('source', 'N/A')} | {rule.get('destination', 'N/A')} | {rule.get('application/service', 'N/A')} | {rule.get('action', 'N/A')} |\n"
 
           # Write Markdown table to file
