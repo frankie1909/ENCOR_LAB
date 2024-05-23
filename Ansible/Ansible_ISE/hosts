@@ -1,0 +1,2 @@
+[ise]
+10.0.100.100 ansible_user=admin ansible_password=your_password ansible_connection=local

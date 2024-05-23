@@ -1,0 +1,4 @@
+---
+collections:
+  - name: cisco.ise
+    source: https://github.com/CiscoISE/ansible-ise

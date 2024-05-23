@@ -1,0 +1,96 @@
+- name: Configure Cisco ISE BYOD Portal and Guest SSID
+  hosts: ise
+  gather_facts: no
+  tasks:
+    - name: Configure BYOD Portal
+      cisco.ise.portal:
+        ise_hostname: "{{ ise_ip }}"
+        ise_username: "{{ ise_username }}"
+        ise_password: "{{ ise_password }}"
+        portal_type: byod
+        portal_name: BYOD_Portal
+        portal_description: "BYOD Portal for Guests"
+        portal_enabled: true
+        verify_ssl: "{{ verify_ssl }}"
+
+    - name: Create Policy Set for BYOD
+      cisco.ise.policy_set:
+        ise_hostname: "{{ ise_ip }}"
+        ise_username: "{{ ise_username }}"
+        ise_password: "{{ ise_password }}"
+        name: BYOD_Policy_Set
+        description: "Policy Set for BYOD"
+        state: present
+        default: false
+        conditions:
+          - conditionType: Simple
+            isNegate: false
+            attributeName: "NetworkAccess:NetworkDeviceName"
+            attributeValue: "WLC9800"
+            operator: "equals"
+        authentication_policy:
+          rules:
+            - rule:
+                name: BYOD_Auth_Rule
+                condition:
+                  conditionType: AND
+                  isNegate: false
+                  children:
+                    - conditionType: Simple
+                      isNegate: false
+                      attributeName: "NetworkAccess:SSID"
+                      attributeValue: "GUEST-SSID"
+                      operator: "equals"
+                identity_source: "InternalUsers"
+        authorization_policy:
+          rules:
+            - rule:
+                name: BYOD_Authorization_Rule
+                condition:
+                  conditionType: AND
+                  isNegate: false
+                  children:
+                    - conditionType: Simple
+                      isNegate: false
+                      attributeName: "NetworkAccess:SSID"
+                      attributeValue: "GUEST-SSID"
+                      operator: "equals"
+                profile: "CiscoWebAuth"
+                web_auth:
+                  acl: "WEB_AUTH_REDIRECT_ACL"
+                  redirect_url: "https://10.0.100.100:8443/guestportal"
+        verify_ssl: "{{ verify_ssl }}"
+
+    - name: Configure Guest SSID on WLC
+      cisco.ise.ssid:
+        ise_hostname: "{{ ise_ip }}"
+        ise_username: "{{ ise_username }}"
+        ise_password: "{{ ise_password }}"
+        ssid_name: "{{ guest_ssid }}"
+        vlan: 21
+        security: open
+        acl: WEB_AUTH_REDIRECT_ACL
+        state: present
+        verify_ssl: "{{ verify_ssl }}"
+
+    - name: Create ACL on WLC
+      cisco.ise.acl:
+        ise_hostname: "{{ ise_ip }}"
+        ise_username: "{{ ise_username }}"
+        ise_password: "{{ ise_password }}"
+        acl_name: "WEB_AUTH_REDIRECT_ACL"
+        acl_rules:
+          - sequence: 10
+            action: permit
+            protocol: tcp
+            source: any
+            destination: "10.0.100.100"
+            destination_port: 80
+          - sequence: 20
+            action: permit
+            protocol: tcp
+            source: any
+            destination: "10.0.100.100"
+            destination_port: 443
+        state: present
+        verify_ssl: "{{ verify_ssl }}"

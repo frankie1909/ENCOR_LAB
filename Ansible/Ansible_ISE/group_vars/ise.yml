@@ -1,0 +1,4 @@
+ise_ip: 10.0.100.100
+ise_username: "admin"
+ise_password: "your_password"
+verify_ssl: false # Falls kein SSL-Zertifikat vorhanden ist
