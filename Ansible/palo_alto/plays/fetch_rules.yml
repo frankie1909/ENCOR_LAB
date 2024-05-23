@@ -1,0 +1,32 @@
+---
+- name: Fetch running security policy
+  community.general.panos_op:
+    ip_address: "{{ ip_address }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
+    api_key: "{{ api_key }}"
+    cmd: "show running security-policy"
+    vsys: "{{ vsys }}"
+  register: result
+
+- name: Parse security rules XML
+  community.general.xml:
+    xmlstring: "{{ result.stdout_xml }}"
+    xpath: "/response/result/member"
+    content: "text"
+  register: security_rules
+
+- name: Convert security rules to Markdown table
+  set_fact:
+    markdown_table: |
+      | Rule Name | From Zone | To Zone | Source | Destination | Application/Service | Action |
+      |-----------|-----------|---------|--------|-------------|----------------------|--------|
+      {% for rule in security_rules.matches %}
+      | {{ rule.member.split(';')[0].strip() }} | {{ (rule.member.split(';')[1].split()[1]).strip() }} | {{ (rule.member.split(';')[1].split()[3]).strip() }} | {{ (rule.member.split(';')[2].split('[')[1].split(']')[0]).strip() }} | {{ (rule.member.split(';')[3].split()[1]).strip() }} | {{ (rule.member.split(';')[4].split('[')[1].split(']')[0]).strip() }} | {{ rule.member.split(';')[5].split()[1].strip() }} |
+      {% endfor %}
+  when: security_rules.matches is defined and security_rules.matches | length > 0
+
+- name: Print Markdown table
+  debug:
+    msg: "{{ markdown_table }}"
+  when: markdown_table is defined
