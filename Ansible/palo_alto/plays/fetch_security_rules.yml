@@ -49,4 +49,3 @@
           | {{ rule.member | regex_search('action (\S+);') }} 
           {% endfor %}
         dest: ../configs/security_rules.md
-s
