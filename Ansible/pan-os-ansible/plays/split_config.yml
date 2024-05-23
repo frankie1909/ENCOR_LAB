@@ -40,3 +40,25 @@
       copy:
         content: "{{ policies }}"
         dest: "config/policies.yml"
+
+    - name: Extract firewall objects
+      xml:
+        path: "config/full_config.xml"
+        xpath: "/config/shared/address"
+      register: fw_objects
+
+    - name: Save firewall objects to file
+      copy:
+        content: "{{ fw_objects }}"
+        dest: "config/fw_objects.yml"
+
+    - name: Extract NAT policies
+      xml:
+        path: "config/full_config.xml"
+        xpath: "/config/devices/entry/vsys/entry/rulebase/nat/rules"
+      register: nat_policies
+
+    - name: Save NAT policies to file
+      copy:
+        content: "{{ nat_policies }}"
+        dest: "config/nat_policies.yml"

@@ -12,6 +12,12 @@
     - name: Load policies configuration
       include_vars: config/policies.yml
 
+    - name: Load firewall objects configuration
+      include_vars: config/fw_objects.yml
+
+    - name: Load NAT policies configuration
+      include_vars: config/nat_policies.yml
+
     - name: Configure interfaces
       paloaltonetworks.panos.panos_interface:
         provider: "{{ provider }}"
@@ -41,3 +47,30 @@
         application: "{{ item.application }}"
         action: "{{ item.action }}"
       loop: "{{ policies }}"
+
+    - name: Configure firewall objects
+      paloaltonetworks.panos.panos_address_object:
+        provider: "{{ provider }}"
+        state: "present"
+        name: "{{ item.name }}"
+        value: "{{ item.value }}"
+        description: "{{ item.description }}"
+      loop: "{{ fw_objects }}"
+
+    - name: Configure NAT policies
+      paloaltonetworks.panos.panos_nat_rule:
+        provider: "{{ provider }}"
+        state: "present"
+        rule_name: "{{ item.rule_name }}"
+        source_zone: "{{ item.source_zone }}"
+        destination_zone: "{{ item.destination_zone }}"
+        source: "{{ item.source }}"
+        destination: "{{ item.destination }}"
+        service: "{{ item.service }}"
+        to_interface: "{{ item.to_interface }}"
+        snat_type: "{{ item.snat_type }}"
+        snat_address_type: "{{ item.snat_address_type }}"
+        snat_static_address: "{{ item.snat_static_address }}"
+        dnat_address: "{{ item.dnat_address }}"
+        dnat_port: "{{ item.dnat_port }}"
+      loop: "{{ nat_policies }}"
