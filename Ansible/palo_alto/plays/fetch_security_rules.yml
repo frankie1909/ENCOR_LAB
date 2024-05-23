@@ -35,15 +35,18 @@
       debug:
         var: security_rules
 
-    - name: Convert security rules to Markdown
+    - name: Convert security rules to Markdown table
       ansible.builtin.copy:
         content: |
+          | Rule Name | From | Source | To | Destination | Action |
+          | --- | --- | --- | --- | --- | --- |
           {% for rule in security_rules.matches %}
-          - **Rule Name**: {{ rule.member.split("; index:")[0].strip('" ') }}
-            - **From**: {{ rule.member | regex_search('from (\S+)') }}
-            - **Source**: {{ rule.member | regex_search('source \[([^\]]+)\]') }}
-            - **To**: {{ rule.member | regex_search('to (\S+)') }}
-            - **Destination**: {{ rule.member | regex_search('destination ([^\;]+)') }}
-            - **Action**: {{ rule.member | regex_search('action (\S+)') }}
+          | {{ rule.member.split("; index:")[0].strip('" ') }} 
+          | {{ rule.member | regex_search('from (\S+);') }} 
+          | {{ rule.member | regex_search('source \[([^\]]+)\]') }} 
+          | {{ rule.member | regex_search('to (\S+);') }} 
+          | {{ rule.member | regex_search('destination ([^\;]+);') }} 
+          | {{ rule.member | regex_search('action (\S+);') }} 
           {% endfor %}
         dest: ../configs/security_rules.md
+s
