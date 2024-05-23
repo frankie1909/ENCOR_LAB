@@ -1,7 +1,7 @@
-# wlc/wlc_api.py
+# wlc/acl.py
 import requests
 from requests.auth import HTTPBasicAuth
-from config import WLC_IP, WLC_USERNAME, WLC_PASSWORD, GUEST_SSID
+from config import WLC_IP, WLC_USERNAME, WLC_PASSWORD
 
 BASE_URL = f"https://{WLC_IP}/restconf/data"
 
@@ -11,34 +11,6 @@ def get_headers():
         "Content-Type": "application/yang-data+json",
         "Accept": "application/yang-data+json"
     }
-
-
-def configure_guest_ssid():
-    ssid_data = {
-        "Cisco-IOS-XE-wireless-ssid-cfg:wlan": {
-            "name": GUEST_SSID,
-            "identifier": 1,
-            "description": "Guest SSID",
-            "broadcast-ssid": True,
-            "security": {
-                "dot1x": False,
-                "wpa": {
-                    "version": "wpa2",
-                    "mfp-client-protection": "optional"
-                }
-            },
-            "mac-filtering": False,
-            "interface": "guest-vlan",
-            "acl": {
-                "name": "WEB_AUTH_REDIRECT_ACL"
-            },
-            "ip-dhcp-server": "10.0.100.100"
-        }
-    }
-    url = f"{BASE_URL}/Cisco-IOS-XE-wireless-ssid-cfg:wlan"
-    response = requests.post(url, headers=get_headers(), auth=HTTPBasicAuth(
-        WLC_USERNAME, WLC_PASSWORD), json=ssid_data, verify=False)
-    return response.json()
 
 
 def create_acl():
