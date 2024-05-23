@@ -24,49 +24,51 @@
         cmd: 'show running security-policy'
       register: result
 
-    - name: Save security rules XML to file
+    - name: Save security rules to XML file
       copy:
         content: "{{ result.stdout_xml }}"
         dest: /tmp/security_rules.xml
 
-    - name: Create Python script to convert XML to Markdown
+    - name: Upload XML to Markdown conversion script
       copy:
         dest: /tmp/xml_to_md.py
         content: |
           import xml.etree.ElementTree as ET
-          import sys
 
-          xml_file = '/tmp/security_rules.xml'
-          tree = ET.parse(xml_file)
+          # Load XML data
+          tree = ET.parse('/tmp/security_rules.xml')
           root = tree.getroot()
 
-          rules = []
-          for member in root.findall('.//member'):
-              rule = {}
-              rule_text = member.text
-              lines = rule_text.strip().split('\n')
-              rule['name'] = lines[0].split(';')[0].strip('" ')
-              for line in lines[1:]:
+          # Function to parse rule details from text
+          def parse_rule_details(rule_text):
+              details = {}
+              for line in rule_text.strip().split('\n'):
                   if ':' in line:
                       key, value = line.split(':', 1)
-                      rule[key.strip()] = value.strip()
+                      details[key.strip()] = value.strip()
                   else:
-                      previous_key = list(rule.keys())[-1]
-                      rule[previous_key] += ' ' + line.strip()
-              rules.append(rule)
+                      last_key = list(details.keys())[-1]
+                      details[last_key] += ' ' + line.strip()
+              return details
 
+          # Prepare Markdown table
           md_table = "| Rule Name | From Zone | To Zone | Source | Destination | Application/Service | Action |\n"
           md_table += "|-----------|-----------|---------|--------|-------------|----------------------|--------|\n"
-          for rule in rules:
-              md_table += f"| {rule['name']} | {rule.get('from', 'N/A')} | {rule.get('to', 'N/A')} | {rule.get('source', 'N/A')} | {rule.get('destination', 'N/A')} | {rule.get('application/service', 'N/A')} | {rule.get('action', 'N/A')} |\n"
 
+          # Parse each rule
+          for member in root.findall('.//member'):
+              rule = parse_rule_details(member.text)
+              md_table += f"| {rule.get('name', 'N/A')} | {rule.get('from', 'N/A')} | {rule.get('to', 'N/A')} | {rule.get('source', 'N/A')} | {rule.get('destination', 'N/A')} | {rule.get('application/service', 'N/A')} | {rule.get('action', 'N/A')} |\n"
+
+          # Write Markdown table to file
           with open('/tmp/security_rules.md', 'w') as f:
               f.write(md_table)
 
-    - name: Run Python script to generate Markdown table
+    - name: Run XML to Markdown conversion script
       command: python3 /tmp/xml_to_md.py
 
-    - name: Copy Markdown table to destination
-      copy:
+    - name: Fetch the generated Markdown file
+      fetch:
         src: /tmp/security_rules.md
-        dest: ../configs/security_rules.md
+        dest: ./configs/security_rules.md
+        flat: yes
