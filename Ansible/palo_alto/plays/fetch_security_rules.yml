@@ -1,20 +1,12 @@
 ---
 - name: Fetch all security rules from PAN-OS Firewall
-  hosts: '{{ target | default("firewall") }}'
-  connection: local
-  gather_facts: false
-
-  vars:
-    device:
-      ip_address: '{{ ip_address }}'
-      username: '{{ username | default(omit) }}'
-      password: '{{ password | default(omit) }}'
-      api_key: '{{ api_key | default(omit) }}'
+  hosts: firewall
+  gather_facts: no
 
   tasks:
     - name: Fetch all security rules
       paloaltonetworks.panos.panos_op:
-        provider: '{{ device }}'
+        provider: '{{ provider }}'
         cmd: 'show running security-policy'
       register: result
 
@@ -23,18 +15,17 @@
         xmlstring: '{{ result.stdout_xml }}'
         xpath: '/response/result/member'
         content: text
-      register: rules
+      register: security_rules
 
     - name: Convert security rules to Markdown
-      set_fact:
-        rules_md: |
-          | Rule Name | Source Zone | Destination Zone | Source Address | Destination Address | Action |
-          |-----------|-------------|------------------|----------------|---------------------|--------|
-          {% for rule in rules.matched %}
-          | {{ rule.split(';')[0].strip('" ') }} | {{ rule.split('from')[1].split(';')[0].strip() }} | {{ rule.split('to')[1].split(';')[0].strip() }} | {{ rule.split('source')[1].split(';')[0].strip('[] ') }} | {{ rule.split('destination')[1].split(';')[0].strip() }} | {{ rule.split('action')[1].split(';')[0].strip() }} |
+      ansible.builtin.copy:
+        content: |
+          {% for rule in security_rules.matches %}
+          - **Rule Name**: {{ rule.member.split("; index:")[0].strip('" ') }}
+            - **From**: {{ rule.member | regex_search('from (\S+)') }}
+            - **Source**: {{ rule.member | regex_search('source \[([^\]]+)\]') }}
+            - **To**: {{ rule.member | regex_search('to (\S+)') }}
+            - **Destination**: {{ rule.member | regex_search('destination ([^\;]+)') }}
+            - **Action**: {{ rule.member | regex_search('action (\S+)') }}
           {% endfor %}
-
-    - name: Save security rules to Markdown file
-      copy:
-        content: '{{ rules_md }}'
-        dest: '../configs/security_rules.md'
+        dest: /path/to/security_rules.md
