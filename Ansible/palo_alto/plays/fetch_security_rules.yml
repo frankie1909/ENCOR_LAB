@@ -24,12 +24,10 @@
         cmd: 'show running security-policy'
       register: result
 
-    - name: Parse security rules XML
-      community.general.xml:
-        xmlstring: '{{ result.stdout_xml }}'
-        xpath: '/response/result/member'
-        content: text
-      register: security_rules
+    - name: Save security rules XML to file
+      copy:
+        content: "{{ result.stdout_xml }}"
+        dest: /tmp/security_rules.xml
 
     - name: Create Python script to convert XML to Markdown
       copy:
@@ -38,8 +36,9 @@
           import xml.etree.ElementTree as ET
           import sys
 
-          xml_data = sys.stdin.read()
-          root = ET.fromstring(xml_data)
+          xml_file = '/tmp/security_rules.xml'
+          tree = ET.parse(xml_file)
+          root = tree.getroot()
 
           rules = []
           for member in root.findall('.//member'):
@@ -61,26 +60,13 @@
           for rule in rules:
               md_table += f"| {rule['name']} | {rule.get('from', 'N/A')} | {rule.get('to', 'N/A')} | {rule.get('source', 'N/A')} | {rule.get('destination', 'N/A')} | {rule.get('application/service', 'N/A')} | {rule.get('action', 'N/A')} |\n"
 
-          print(md_table)
+          with open('/tmp/security_rules.md', 'w') as f:
+              f.write(md_table)
 
     - name: Run Python script to generate Markdown table
       command: python3 /tmp/xml_to_md.py
-      args:
-        stdin: '{{ result.stdout_xml }}'
-      register: md_output
 
-    - name: Write Markdown table to file
+    - name: Copy Markdown table to destination
       copy:
-        content: "{{ md_output.stdout }}"
+        src: /tmp/security_rules.md
         dest: ../configs/security_rules.md
-
-        
-
-
-
-
-        
-
-
-
-        
