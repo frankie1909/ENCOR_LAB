@@ -30,22 +30,3 @@
         xpath: '/response/result/member'
         content: text
       register: security_rules
-
-    - name: Convert security rules to Markdown table
-      ansible.builtin.copy:
-        content: |
-          | Rule Name | From | Source | To | Destination | Action |
-          | --- | --- | --- | --- | --- | --- |
-          {% for rule in security_rules.matches %}
-          {% set rule_lines = rule.member.split('\n') %}
-          {% if rule_lines|length > 1 %}
-          {% set rule_name = rule_lines[0].split('index:')[0].strip().strip('"') %}
-          {% set rule_from = rule_lines[1].split(':', 1)[1].strip() %}
-          {% set rule_source = rule_lines[2].split(':', 1)[1].strip() %}
-          {% set rule_to = rule_lines[3].split(':', 1)[1].strip() %}
-          {% set rule_destination = rule_lines[4].split(':', 1)[1].strip() %}
-          {% set rule_action = (rule_lines | select("search", "action") | list | first).split(':', 1)[1].strip() %}
-          | {{ rule_name }} | {{ rule_from }} | {{ rule_source }} | {{ rule_to }} | {{ rule_destination }} | {{ rule_action }} |
-          {% endif %}
-          {% endfor %}
-        dest: ../configs/security_rules.md
