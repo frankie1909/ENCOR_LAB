@@ -18,7 +18,23 @@
         cmd: 'show running security-policy'
       register: result
 
-    - name: Save security rules to file
+    - name: Parse security rules XML
+      xml:
+        xmlstring: '{{ result.stdout_xml }}'
+        xpath: '/response/result/rule-base/entry/rules/entry'
+        content: text
+      register: rules
+
+    - name: Convert security rules to Markdown
+      set_fact:
+        rules_md: |
+          | Rule Name | Source Zone | Destination Zone | Source Address | Destination Address | Action |
+          |-----------|-------------|------------------|----------------|---------------------|--------|
+          {% for rule in rules.matched %}
+          | {{ rule['name'] }} | {{ rule['from']['member'] | join(', ') }} | {{ rule['to']['member'] | join(', ') }} | {{ rule['source']['member'] | join(', ') }} | {{ rule['destination']['member'] | join(', ') }} | {{ rule['action'] }} |
+          {% endfor %}
+
+    - name: Save security rules to Markdown file
       copy:
-        content: '{{ result.stdout }}'
-        dest: '../configs/security_rules.txt'
+        content: '{{ rules_md }}'
+        dest: '../configs/security_rules.md'
