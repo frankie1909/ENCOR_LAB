@@ -15,7 +15,7 @@
     - name: Fetch all security rules
       paloaltonetworks.panos.panos_op:
         provider: '{{ device }}'
-        cmd: 'show config running'
+        cmd: 'show running security-policy'
       register: result
 
     - name: Save security rules to file
