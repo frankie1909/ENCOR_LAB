@@ -1,0 +1,24 @@
+---
+- name: Fetch all security rules from PAN-OS Firewall
+  hosts: '{{ target | default("firewall") }}'
+  connection: local
+  gather_facts: false
+
+  vars:
+    device:
+      ip_address: '{{ ip_address }}'
+      username: '{{ username | default(omit) }}'
+      password: '{{ password | default(omit) }}'
+      api_key: '{{ api_key | default(omit) }}'
+
+  tasks:
+    - name: Fetch all security rules
+      paloaltonetworks.panos.panos_op:
+        provider: '{{ device }}'
+        cmd: 'show config running'
+      register: result
+
+    - name: Save security rules to file
+      copy:
+        content: '{{ result.stdout }}'
+        dest: '../configs/security_rules.txt'
