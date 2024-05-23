@@ -47,14 +47,13 @@
               rule_text = member.text
               lines = rule_text.strip().split('\n')
               rule['name'] = lines[0].split(';')[0].strip('" ')
-              current_key = None
               for line in lines[1:]:
                   if ':' in line:
                       key, value = line.split(':', 1)
                       rule[key.strip()] = value.strip()
-                      current_key = key.strip()
-                  elif current_key:
-                      rule[current_key] += ' ' + line.strip()
+                  else:
+                      previous_key = list(rule.keys())[-1]
+                      rule[previous_key] += ' ' + line.strip()
               rules.append(rule)
 
           md_table = "| Rule Name | From Zone | To Zone | Source | Destination | Application/Service | Action |\n"
@@ -74,6 +73,8 @@
       copy:
         content: "{{ md_output.stdout }}"
         dest: ../configs/security_rules.md
+
+        
 
 
 
