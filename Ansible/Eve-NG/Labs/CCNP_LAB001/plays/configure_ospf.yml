@@ -31,5 +31,5 @@
 
     - name: Apply OSPF configuration to device
       ios_config:
-        src: ./configs/{{ inventory_hostname }}_ospf.cfg
+        src: /root/ENCOR_LAB/Ansible/Eve-NG/Labs/CCNP_LAB001/configs/{{ inventory_hostname }}_ospf.cfg
         backup: yes
