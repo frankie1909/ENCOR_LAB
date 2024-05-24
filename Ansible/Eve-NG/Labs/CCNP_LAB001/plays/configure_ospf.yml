@@ -17,11 +17,11 @@
     - name: Load OSPF configuration from template
       template:
         src: templates/ospf_config.j2
-        dest: ../configs/{{ inventory_hostname }}_ospf.cfg
+        dest: ./configs/{{ inventory_hostname }}_ospf.cfg
       vars:
         router_id: "{{ hostvars[inventory_hostname]['router-id'] }}"
 
     - name: Apply OSPF configuration to device
       ios_config:
-        src: ../configs/{{ inventory_hostname }}_ospf.cfg
+        src: ./configs/{{ inventory_hostname }}_ospf.cfg
         backup: yes
