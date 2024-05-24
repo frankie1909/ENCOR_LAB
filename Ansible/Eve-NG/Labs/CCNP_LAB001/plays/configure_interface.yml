@@ -11,11 +11,11 @@
     - name: Load interface configuration from template
       template:
         src: templates/Interfaces.j2
-        dest: ../configs/Interfaces_R1.cfg
+        dest: ./configs/Interfaces_R1.cfg
 
     - name: Apply interface configuration to device
       ios_config:
-        src: ../configs/Interfaces_R1.cfg
+        src: ./configs/Interfaces_R1.cfg
         backup: yes
 
 - name: Configure Interface G0/1 on R2
@@ -29,9 +29,9 @@
     - name: Load interface configuration from template
       template:
         src: templates/Interfaces.j2
-        dest: ../configs/Interfaces_R2.cfg
+        dest: ./configs/Interfaces_R2.cfg
 
     - name: Apply interface configuration to device
       ios_config:
-        src: ../configs/Interfaces_R2.cfg
+        src: ./configs/Interfaces_R2.cfg
         backup: yes
