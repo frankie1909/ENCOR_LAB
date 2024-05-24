@@ -16,7 +16,7 @@
 
     - name: Load OSPF configuration from template
       template:
-        src: plays/templates/ospf_config.j2
+        src: ./plays/templates/ospf_config.j2
         dest: ./configs/{{ inventory_hostname }}_ospf.cfg
       vars:
         router_id: "{{ hostvars[inventory_hostname]['router-id'] }}"
