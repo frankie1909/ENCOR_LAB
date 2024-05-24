@@ -21,6 +21,14 @@
       vars:
         router_id: "{{ hostvars[inventory_hostname]['router-id'] }}"
 
+    - name: List contents of configs directory
+      command: ls -l ./configs/
+      register: ls_output
+
+    - name: Debug list of configs directory
+      debug:
+        var: ls_output.stdout_lines
+
     - name: Apply OSPF configuration to device
       ios_config:
         src: ./configs/{{ inventory_hostname }}_ospf.cfg
