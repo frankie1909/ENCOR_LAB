@@ -1,8 +1,7 @@
 router ospf {{ ospf_instance }}
-  router-id {{ router_id }}
+ router-id {{ router_id }}
 {% for area_id, area in areas.items() %}
-  {% for interface in area.interfaces %}
-  network {{ interface.network }} {{ interface.wildcard }} area {{ area_id }}
-  {% endfor %}
+{% for interface in area.interfaces %}
+ network {{ interface.network }} {{ interface.wildcard }} area {{ area_id }}
 {% endfor %}
-
+{% endfor %}
