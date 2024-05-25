@@ -3,9 +3,6 @@ router ospf {{ ospf_instance }}
 {% for area_id, area in areas.items() %}
   {% for interface in area.interfaces %}
   network {{ interface.network }} {{ interface.wildcard }} area {{ area_id }}
-  interface {{ interface.name }}
-  {% if area.password_protected %}
-    ip ospf message-digest-key 1 md5 {{ area.password }}
-  {% endif %}
   {% endfor %}
 {% endfor %}
+
