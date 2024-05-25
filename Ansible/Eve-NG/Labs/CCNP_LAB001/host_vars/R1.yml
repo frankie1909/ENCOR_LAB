@@ -10,8 +10,24 @@ lag_members:
   - GigabitEthernet1/3
 
 hostname: R1
+#OSPF
+router_id: "1.1.1.1"
+ospf_instance: 1
+areas:
+  0:
+    interfaces:
+      - name: "GigabitEthernet0/1"
+        network: "10.0.1.0"
+        wildcard: "0.0.0.7"
+    password_protected: false
+  1:
+    interfaces:
+      - name: "GigabitEthernet0/2"
+        network: "10.0.0.0"
+        wildcard: "0.0.0.3"
+        password_protected: false
+#    password: "ospfpass123"
 
-router_id: 1.1.1.1
 
 trunk_ports:
   - GigabitEthernet0/2

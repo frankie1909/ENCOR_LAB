@@ -1,0 +1,29 @@
+- name: Configure OSPF on routers
+  hosts: LAB1
+  gather_facts: no
+  tasks:
+    - name: Debug router variables
+      debug:
+        msg: "Router ID for {{ inventory_hostname }} is {{ hostvars[inventory_hostname]['router_id'] }}"
+
+    - name: Load OSPF configuration from template
+      template:
+        src: templates/ospf_config_HV.j2
+        dest: ../configs/{{ inventory_hostname }}_ospf.cfg
+      vars:
+        router_id: "{{ hostvars[inventory_hostname]['router_id'] }}"
+        ospf_instance: "{{ hostvars[inventory_hostname]['ospf_instance'] }}"
+        areas: "{{ hostvars[inventory_hostname]['areas'] }}"
+
+    - name: List contents of configs directory
+      command: ls -l ../configs/
+      register: ls_output
+
+    - name: Debug list of configs directory
+      debug:
+        var: ls_output.stdout_lines
+
+    - name: Apply OSPF configuration to device
+      ios_config:
+        src: ../configs/{{ inventory_hostname }}_ospf.cfg
+        backup: yes

@@ -9,6 +9,8 @@
         - name: "GigabitEthernet1/0/1"
           network: "10.0.1.0"
           wildcard: "0.0.0.7"
+      1:
+        
   tasks:
     - name: Debug router variables
       debug:
