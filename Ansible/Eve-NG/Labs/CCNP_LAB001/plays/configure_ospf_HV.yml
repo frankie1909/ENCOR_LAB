@@ -15,16 +15,25 @@
         ospf_instance: "{{ hostvars[inventory_hostname]['ospf_instance'] }}"
         areas: "{{ hostvars[inventory_hostname]['areas'] }}"
 
-    - name: List contents of configs directory
-      command: ls -l ../configs/
-      register: ls_output
+    - name: Display generated OSPF configuration
+      command: cat ../configs/{{ inventory_hostname }}_ospf.cfg
+      register: ospf_config_content
 
-    - name: Debug list of configs directory
+    - name: Debug generated OSPF configuration
       debug:
-        var: ls_output.stdout_lines
+        var: ospf_config_content.stdout
 
-    - name: Apply OSPF configuration to device
+    - name: Apply OSPF configuration to device with diff check
       ios_config:
         src: ../configs/{{ inventory_hostname }}_ospf.cfg
         backup: yes
         match: exact
+        diff_against: running
+        diff_ignore_lines:
+          - '^Building configuration'
+          - '^Current configuration'
+      register: config_diff
+
+    - name: Display config differences
+      debug:
+        var: config_diff
