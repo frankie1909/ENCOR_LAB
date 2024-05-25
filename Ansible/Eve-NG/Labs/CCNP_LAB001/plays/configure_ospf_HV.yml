@@ -31,7 +31,7 @@
 
     - name: Save current OSPF configuration to file
       copy:
-        content: "{{ current_ospf_config.stdout[0] }}"
+        content: "{{ current_ospf_config.stdout[0] }}\n"
         dest: ../configs/{{ inventory_hostname }}_current_ospf.cfg
 
     - name: Compare configurations
