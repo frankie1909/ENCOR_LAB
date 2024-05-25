@@ -1,3 +1,5 @@
 host,interface_name,ip_address,subnet_mask
 R1,GigabitEthernet0/1,10.0.1.1,255.255.255.248
+R1,GigabitEthernet0/2,10.0.0.1,255.255.255.252
 R2,GigabitEthernet0/1,10.0.1.2,255.255.255.248
+R3,GigabitEthernet0/2,10.0.0.2,255.255.255.252
