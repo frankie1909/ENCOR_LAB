@@ -27,3 +27,4 @@
       ios_config:
         src: ../configs/{{ inventory_hostname }}_ospf.cfg
         backup: yes
+        match: exact
