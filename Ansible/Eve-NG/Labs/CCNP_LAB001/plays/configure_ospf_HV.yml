@@ -23,17 +23,34 @@
       debug:
         var: ospf_config_content.stdout
 
+    - name: Check current OSPF configuration
+      ios_command:
+        commands:
+          - show running-config | section router ospf
+      register: current_ospf_config
+
+    - name: Save current OSPF configuration to file
+      copy:
+        content: "{{ current_ospf_config.stdout[0] }}"
+        dest: ../configs/{{ inventory_hostname }}_current_ospf.cfg
+
+    - name: Compare configurations
+      command: diff ../configs/{{ inventory_hostname }}_ospf.cfg ../configs/{{ inventory_hostname }}_current_ospf.cfg
+      register: config_diff
+      ignore_errors: yes
+
+    - name: Debug config diff result
+      debug:
+        var: config_diff.stdout
+
     - name: Apply OSPF configuration to device with diff check
       ios_config:
         src: ../configs/{{ inventory_hostname }}_ospf.cfg
         backup: yes
         match: exact
-        diff_against: running
-        diff_ignore_lines:
-          - '^Building configuration'
-          - '^Current configuration'
-      register: config_diff
+      when: config_diff.rc != 0
 
-    - name: Display config differences
+    - name: Display config differences if any
       debug:
-        var: config_diff
+        msg: "Configuration applied to {{ inventory_hostname }} because differences were found."
+      when: config_diff.rc != 0
