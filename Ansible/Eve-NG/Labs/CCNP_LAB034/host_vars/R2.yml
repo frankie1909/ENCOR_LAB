@@ -1,0 +1,28 @@
+port_channel:
+  number: 1
+  mode: active
+  ports:
+    - GigabitEthernet1/2
+    - GigabitEthernet1/3
+
+lag_members:
+  - GigabitEthernet1/2
+  - GigabitEthernet1/1
+
+hostname: R2
+
+#OSPF
+router_id: "2.2.2.2"
+ospf_instance: 1
+areas:
+  0:
+    interfaces:
+      - name: "GigabitEthernet0/1"
+        network: "10.0.1.0"
+        wildcard: "0.0.0.7"
+    password_protected: false
+
+
+trunk_ports:
+  - GigabitEthernet0/2
+  - Port-channel20

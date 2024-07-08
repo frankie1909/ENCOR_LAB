@@ -1,0 +1,10 @@
+---
+- name: Apply hostname
+  hosts: LAB1
+  gather_facts: no
+
+  tasks:
+    - name: Set Hostname
+      cisco.ios.ios_config:
+        lines:
+          - hostname {{ hostname }}

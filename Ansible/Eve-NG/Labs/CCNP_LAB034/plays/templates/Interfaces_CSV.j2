@@ -1,0 +1,4 @@
+interface {{ item.interface_name }}
+  no switchport
+  ip address {{ item.ip_address }} {{ item.subnet_mask }}
+  no shutdown

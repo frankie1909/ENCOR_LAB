@@ -1,0 +1,11 @@
+#OSPF
+router_id: "4.4.4.4"
+ospf_instance: 1
+areas:
+  2:
+    interfaces:
+      - name: "GigabitEthernet1/1"
+        network: "10.0.0.8"
+        wildcard: "0.0.0.3"
+    password_protected: false
+#    password: "ospfpass456"
