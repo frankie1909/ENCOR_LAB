@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ---
 - name: Apply hostname
   hosts: LAB1
@@ -8,4 +9,16 @@
       cisco.ios.ios_hostname:
         config:
           hostname: "{{ hostname }}"
+=======
+---
+- name: Apply hostname
+  hosts: LAB1
+  gather_facts: no
+
+  tasks:
+    - name: set Hostname
+      cisco.ios.ios_hostname:
+        config:
+          hostname: "{{ hostname }}"
+>>>>>>> 9759c638c595a5f820f607fd57b556b2dc3b24bb
         state: merged

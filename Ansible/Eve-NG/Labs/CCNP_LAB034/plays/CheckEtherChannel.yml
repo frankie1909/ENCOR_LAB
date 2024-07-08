@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 - name: Check EtherChannel existence
   hosts: LAB1
   gather_facts: no
@@ -13,3 +14,20 @@
         msg: "EtherChannel {{ lag_members | join(',') }} is {{ 'present' if ansible_net_interfaces[item].description is defined and ansible_net_interfaces[item].description is not none and 'Port-channel' in ansible_net_interfaces[item].description else 'absent' }}"
       loop: "{{ lag_members }}"
    #   when: ansible_net_interfaces[item].description is defined and ansible_net_interfaces[item].description is not none
+=======
+- name: Check EtherChannel existence
+  hosts: LAB1
+  gather_facts: no
+
+  tasks:
+    - name: Gather interface facts
+      ios_facts:
+        gather_subset:
+          - interfaces
+
+    - name: Display EtherChannel status
+      debug:
+        msg: "EtherChannel {{ lag_members | join(',') }} is {{ 'present' if ansible_net_interfaces[item].description is defined and ansible_net_interfaces[item].description is not none and 'Port-channel' in ansible_net_interfaces[item].description else 'absent' }}"
+      loop: "{{ lag_members }}"
+   #   when: ansible_net_interfaces[item].description is defined and ansible_net_interfaces[item].description is not none
+>>>>>>> 9759c638c595a5f820f607fd57b556b2dc3b24bb

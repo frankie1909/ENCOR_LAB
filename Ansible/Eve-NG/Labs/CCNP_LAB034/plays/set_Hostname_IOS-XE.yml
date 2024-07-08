@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ---
 - name: Apply hostname
   hosts: LAB1
@@ -7,4 +8,15 @@
     - name: Set Hostname
       cisco.ios.ios_config:
         lines:
+=======
+---
+- name: Apply hostname
+  hosts: LAB1
+  gather_facts: no
+
+  tasks:
+    - name: Set Hostname
+      cisco.ios.ios_config:
+        lines:
+>>>>>>> 9759c638c595a5f820f607fd57b556b2dc3b24bb
           - hostname {{ hostname }}

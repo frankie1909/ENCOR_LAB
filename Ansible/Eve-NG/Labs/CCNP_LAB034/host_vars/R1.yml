@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 port_channel:
   number: 1
   mode: active
@@ -33,3 +34,40 @@ trunk_ports:
   - GigabitEthernet0/2
   - GigabitEthernet0/3
   - GigabitEthernet1/0
+=======
+port_channel:
+  number: 1
+  mode: active
+  ports:
+    - GigabitEthernet1/2
+    - GigabitEthernet1/3
+
+lag_members:
+  - GigabitEthernet1/2
+  - GigabitEthernet1/3
+
+hostname: R1
+#OSPF
+router_id: "1.1.1.1"
+ospf_instance: 1
+areas:
+  0:
+    interfaces:
+      - name: "GigabitEthernet0/1"
+        network: "10.0.1.0"
+        wildcard: "0.0.0.7"
+    password_protected: false
+  1:
+    interfaces:
+      - name: "GigabitEthernet0/2"
+        network: "10.0.0.0"
+        wildcard: "0.0.0.3"
+        password_protected: false
+#    password: "ospfpass123"
+
+
+trunk_ports:
+  - GigabitEthernet0/2
+  - GigabitEthernet0/3
+  - GigabitEthernet1/0
+>>>>>>> 9759c638c595a5f820f607fd57b556b2dc3b24bb

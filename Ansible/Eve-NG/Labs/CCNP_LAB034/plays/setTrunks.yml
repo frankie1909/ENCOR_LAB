@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ---
 - name: Apply hostname and configure trunk ports
   hosts: LAB1
@@ -27,4 +28,35 @@
         state: merged
       loop: "{{ host_vars.trunk_ports }}"
 
+=======
+---
+- name: Apply hostname and configure trunk ports
+  hosts: LAB1
+  gather_facts: no
+
+#
+ #   trunk_ports:
+  #    - GigabitEthernet0/2
+   #   - GigabitEthernet0/3
+
+  tasks:
+    - name: Load host variables
+      include_vars:
+        file: "../host_vars/{{ inventory_hostname }}.yml"
+        name: host_vars
+
+    - name: Replaces device configuration with provided configuration
+      cisco.ios.ios_l2_interfaces:
+        config:
+          - name: "{{ item }}"
+            mode: trunk
+            trunk:
+              allowed_vlans: 10,20,30
+              native_vlan: 20
+              pruning_vlans: 10
+              encapsulation: dot1q
+        state: merged
+      loop: "{{ host_vars.trunk_ports }}"
+
+>>>>>>> 9759c638c595a5f820f607fd57b556b2dc3b24bb
     

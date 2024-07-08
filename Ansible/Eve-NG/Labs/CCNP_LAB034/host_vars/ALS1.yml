@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 port_channel:
   number: 1
   mode: active
@@ -14,4 +15,22 @@ hostname: Eve-NG-Ansible_Lab1
 trunk_ports:
   - GigabitEthernet0/3
 
+=======
+port_channel:
+  number: 1
+  mode: active
+  ports:
+    - GigabitEthernet1/2
+    - GigabitEthernet1/3
+
+lag_members:
+  - GigabitEthernet1/2
+  - GigabitEthernet1/3
+
+hostname: Eve-NG-Ansible_Lab1
+
+trunk_ports:
+  - GigabitEthernet0/3
+
+>>>>>>> 9759c638c595a5f820f607fd57b556b2dc3b24bb
 vtp_mode: server

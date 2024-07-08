@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 router ospf {{ ospf_instance }}
  router-id {{ router_id }}
 {% for area_id, area in areas.items() %}
@@ -6,3 +7,13 @@ router ospf {{ ospf_instance }}
 {% endfor %}
 {% endfor %}
 
+=======
+router ospf {{ ospf_instance }}
+ router-id {{ router_id }}
+{% for area_id, area in areas.items() %}
+{% for interface in area.interfaces %}
+ network {{ interface.network }} {{ interface.wildcard }} area {{ area_id }}
+{% endfor %}
+{% endfor %}
+
+>>>>>>> 9759c638c595a5f820f607fd57b556b2dc3b24bb

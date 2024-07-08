@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ansible_user: admin
 ansible_ssh_pass: Sei8sam!
 ansible_network_os: ios
@@ -16,3 +17,23 @@ vlans:
   - { id: 30, name: "printer" }
 
 
+=======
+ansible_user: admin
+ansible_ssh_pass: Sei8sam!
+ansible_network_os: ios
+ansible_connection: network_cli
+
+
+#ISE Tacacs Connection
+ise_hostname: CCA_ATWV_ISE01
+ise_username: admin
+ise_password: supersecurepassword
+ise_verify: false
+
+vlans:
+  - { id: 10, name: "Client" }
+  - { id: 20, name: "IoT" }
+  - { id: 30, name: "printer" }
+
+
+>>>>>>> 9759c638c595a5f820f607fd57b556b2dc3b24bb

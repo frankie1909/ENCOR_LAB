@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ---
 - name: Save running config to startup config and export full config
   hosts: LAB1
@@ -19,3 +20,26 @@
       copy:
         content: "{{ full_config.stdout[0] }}"
         dest: "./configs/{{ inventory_hostname }}_Fullconfig_{{ lookup('pipe', 'date +%Y%m%d') }}.cfg"
+=======
+---
+- name: Save running config to startup config and export full config
+  hosts: LAB1
+  gather_facts: no
+
+  tasks:
+    - name: Save running config to startup config
+      ios_command:
+        commands:
+          - write memory
+
+    - name: Export full config to configs folder
+      ios_command:
+        commands:
+          - show running-config
+      register: full_config
+
+    - name: Save full config to file
+      copy:
+        content: "{{ full_config.stdout[0] }}"
+        dest: "./configs/{{ inventory_hostname }}_Fullconfig_{{ lookup('pipe', 'date +%Y%m%d') }}.cfg"
+>>>>>>> 9759c638c595a5f820f607fd57b556b2dc3b24bb

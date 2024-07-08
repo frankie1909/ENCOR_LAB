@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 - name: Configure LACP Port-Channels
   hosts: LAB1
   gather_facts: no
@@ -16,3 +17,23 @@
         members: "{{ lag_members }}"
       tags:
         - create
+=======
+- name: Configure LACP Port-Channels
+  hosts: LAB1
+  gather_facts: no
+
+  tasks:
+    - name: Delete Etherchannel
+      cisco.ios.ios_linkagg:
+        group: 20
+        state: absent
+
+    - name: Create Etherchannel
+      cisco.ios.ios_linkagg:
+        group: 20
+        state: present
+        mode: active
+        members: "{{ lag_members }}"
+      tags:
+        - create
+>>>>>>> 9759c638c595a5f820f607fd57b556b2dc3b24bb

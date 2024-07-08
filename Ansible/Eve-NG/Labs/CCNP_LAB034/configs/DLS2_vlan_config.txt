@@ -1,6 +1,15 @@
+<<<<<<< HEAD
 vlan 10
     name Client
 vlan 20
     name IoT
 vlan 30
     name printer
+=======
+vlan 10
+    name Client
+vlan 20
+    name IoT
+vlan 30
+    name printer
+>>>>>>> 9759c638c595a5f820f607fd57b556b2dc3b24bb

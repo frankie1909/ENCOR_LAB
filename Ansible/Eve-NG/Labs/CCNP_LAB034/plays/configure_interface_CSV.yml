@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 - name: Configure interfaces from CSV
   hosts: all
   gather_facts: no
@@ -22,4 +23,30 @@
       when: inventory_hostname in item.host
       loop: "{{ csv_data.list }}"
       loop_control:
+=======
+- name: Configure interfaces from CSV
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Read interface configurations from CSV
+      read_csv:
+        path: templates/interface_configs.csv
+      register: csv_data
+
+    - name: Configure interfaces
+      template:
+        src: templates/Interfaces_CSV.j2
+        dest: "../configs/Interfaces_{{ item.host }}.cfg"
+      loop: "{{ csv_data.list }}"
+      loop_control:
+        loop_var: item
+
+    - name: Apply interface configurations to devices
+      ios_config:
+        src: "../configs/Interfaces_{{ inventory_hostname }}.cfg"
+        backup: yes
+      when: inventory_hostname in item.host
+      loop: "{{ csv_data.list }}"
+      loop_control:
+>>>>>>> 9759c638c595a5f820f607fd57b556b2dc3b24bb
         loop_var: item

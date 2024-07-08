@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # plays/configure_ospf.yml
 
 - name: Configure OSPF on routers
@@ -35,3 +36,42 @@
       ios_config:
         src: /root/ENCOR_LAB/Ansible/Eve-NG/Labs/CCNP_LAB001/configs/{{ inventory_hostname }}_ospf.cfg
         backup: yes
+=======
+# plays/configure_ospf.yml
+
+- name: Configure OSPF on routers
+  hosts: LAB1
+  gather_facts: no
+  vars:
+    areas:
+      0:
+        - name: "GigabitEthernet1/0/1"
+          network: "10.0.1.0"
+          wildcard: "0.0.0.7"
+      1:
+        
+  tasks:
+    - name: Debug router variables
+      debug:
+        msg: "Router ID for {{ inventory_hostname }} is {{ hostvars[inventory_hostname]['router-id'] }}"
+
+    - name: Load OSPF configuration from template
+      template:
+        src: templates/ospf_config.j2
+        dest: ./configs/{{ inventory_hostname }}_ospf.cfg
+      vars:
+        router_id: "{{ hostvars[inventory_hostname]['router-id'] }}"
+
+    - name: List contents of configs directory
+      command: ls -l ./configs/
+      register: ls_output
+
+    - name: Debug list of configs directory
+      debug:
+        var: ls_output.stdout_lines
+
+    - name: Apply OSPF configuration to device
+      ios_config:
+        src: /root/ENCOR_LAB/Ansible/Eve-NG/Labs/CCNP_LAB001/configs/{{ inventory_hostname }}_ospf.cfg
+        backup: yes
+>>>>>>> 9759c638c595a5f820f607fd57b556b2dc3b24bb

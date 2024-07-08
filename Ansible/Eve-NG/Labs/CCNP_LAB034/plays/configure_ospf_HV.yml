@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 - name: Configure OSPF on routers
   hosts: LAB1
   gather_facts: no
@@ -54,3 +55,61 @@
       debug:
         msg: "Configuration applied to {{ inventory_hostname }} because differences were found."
       when: config_diff.rc != 0
+=======
+- name: Configure OSPF on routers
+  hosts: LAB1
+  gather_facts: no
+  tasks:
+    - name: Debug router variables
+      debug:
+        msg: "Router ID for {{ inventory_hostname }} is {{ hostvars[inventory_hostname]['router_id'] }}"
+
+    - name: Load OSPF configuration from template
+      template:
+        src: templates/ospf_config_HV.j2
+        dest: ../configs/{{ inventory_hostname }}_ospf.cfg
+      vars:
+        router_id: "{{ hostvars[inventory_hostname]['router_id'] }}"
+        ospf_instance: "{{ hostvars[inventory_hostname]['ospf_instance'] }}"
+        areas: "{{ hostvars[inventory_hostname]['areas'] }}"
+
+    - name: Display generated OSPF configuration
+      command: cat ../configs/{{ inventory_hostname }}_ospf.cfg
+      register: ospf_config_content
+
+    - name: Debug generated OSPF configuration
+      debug:
+        var: ospf_config_content.stdout
+
+    - name: Check current OSPF configuration
+      ios_command:
+        commands:
+          - show running-config | section router ospf
+      register: current_ospf_config
+
+    - name: Save current OSPF configuration to file
+      copy:
+        content: "{{ current_ospf_config.stdout[0] }}\n"
+        dest: ../configs/{{ inventory_hostname }}_current_ospf.cfg
+
+    - name: Compare configurations
+      command: diff ../configs/{{ inventory_hostname }}_ospf.cfg ../configs/{{ inventory_hostname }}_current_ospf.cfg
+      register: config_diff
+      ignore_errors: yes
+
+    - name: Debug config diff result
+      debug:
+        var: config_diff.stdout
+
+    - name: Apply OSPF configuration to device with diff check
+      ios_config:
+        src: ../configs/{{ inventory_hostname }}_ospf.cfg
+        backup: yes
+        match: exact
+      when: config_diff.rc != 0
+
+    - name: Display config differences if any
+      debug:
+        msg: "Configuration applied to {{ inventory_hostname }} because differences were found."
+      when: config_diff.rc != 0
+>>>>>>> 9759c638c595a5f820f607fd57b556b2dc3b24bb
