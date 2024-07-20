@@ -1,0 +1,49 @@
+---
+# Generate and save network interfaces information as CSV
+- hosts: '{{ target | default("firewall") }}'
+  connection: local
+
+  vars:
+    device:
+      ip_address: "{{ ip_address }}"
+      username: "{{ username | default(omit) }}"
+      password: "{{ password | default(omit) }}"
+      api_key: "{{ api_key | default(omit) }}"
+
+  tasks:
+    - name: Retrieve network interfaces information
+      paloaltonetworks.panos.panos_op:
+        provider:
+          ip_address: "{{ device.ip_address }}"
+          username: "{{ device.username }}"
+          password: "{{ device.password }}"
+          api_key: "{{ device.api_key }}"
+        cmd: "show interfaces all"
+        cmd_is_xml: no
+      register: interface_info
+
+    - name: Parse network interfaces information into CSV format
+      set_fact:
+        interface_lines: |
+          {% set lines = [] %}
+          {% for line in interface_info.stdout.splitlines() %}
+            {% if line.startswith("Interface") or line.strip() == "" %}
+              {% continue %}
+            {% endif %}
+            {% set parts = line.split() %}
+            {% if parts | length >= 4 %}
+              {% set interface = parts[0] %}
+              {% set ip_address = parts[1] %}
+              {% set netmask = parts[2] %}
+              {% set status = parts[3] %}
+              {{ lines.append((interface ~ "," ~ ip_address ~ "," ~ netmask ~ "," ~ status)) }}
+            {% endif %}
+          {% endfor %}
+          {% set csv_content = "Interface,IP Address,Netmask,Status\n" ~ lines | join("\n") %}
+          {{ csv_content }}
+
+    - name: Save network interfaces information to CSV file
+      copy:
+        content: "{{ interface_lines }}"
+        dest: "./network_interfaces.csv"
+      when: interface_info.stdout is defined
