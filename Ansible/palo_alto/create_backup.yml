@@ -1,25 +1,5 @@
 ---
-# fw_rules.yml - Create security rules on a PAN-OS device.
-#
-# Description
-# ===========
-#
-# Quick examples of how to use the 'panos_security_rule' module to create security rules on a PAN-OS device.
-#
-# This playbook requires connection details for the device to be specified in the variables 'ip_address', 'username',
-# and 'password'.  These may be defined as host variables (see `host_vars/firewall.yml` for an example) or
-# extra vars.
-#
-# Modules Used
-# ============
-#
-# panos_security_rule - https://paloaltonetworks.github.io/pan-os-ansible/modules/panos_security_rule.html
-#
-# Usage
-# =====
-#
-#   $ ansible-playbook -i inventory fw_rules.yml
-
+# Generate and save config backup
 - hosts: '{{ target | default("firewall") }}'
   connection: local
 
@@ -31,19 +11,19 @@
       api_key: "{{ api_key | default(omit) }}"
 
   tasks:
-    - name: Backup configuration from PAN Equipment
-      connection: local
-      check_mode: no
-      uri:
-        validate_certs: no
-        url: "https://{{ansible_host}}/api/?type=config&action=show&key={{key_list.matches[0].key}}"
-        return_content: yes
-        method: GET
-      register: configuration_string
+    - name: Generate a configuration backup
+      paloaltonetworks.panos.panos_op:
+        provider:
+          ip_address: "{{ device.ip_address }}"
+          username: "{{ device.username }}"
+          password: "{{ device.password }}"
+          api_key: "{{ device.api_key }}"
+        cmd: "show config running"
+        cmd_is_xml: no
+      register: config_backup
 
-    - name: Remove XML Header and Save file in {{configs_dir}}
-      connection: local
-      check_mode: no
+    - name: Save configuration backup to local file
       copy:
-        content: "{{configuration_string['content']  | regex_replace('<response.*<result>') | regex_replace('</result></response>')}}"
-        dest: "{{configs_dir}}{{hostvars.localhost.DTG}}/{{inventory_hostname}}-{{hostvars.localhost.DTG}}-config.xml"
+        content: "{{ config_backup.stdout }}"
+        dest: "./config_backup.xml"
+      when: config_backup.stdout is defined
