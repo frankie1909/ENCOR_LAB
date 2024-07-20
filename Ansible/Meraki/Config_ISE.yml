@@ -1,0 +1,83 @@
+---
+- name: Configure Meraki Dashboard for 802.1X
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars:
+    meraki_api_key: "YOUR_MERAKI_API_KEY"
+    org_name: "YOUR_ORG_NAME"
+    net_name: "YOUR_NETWORK_NAME"
+    ise_ip: "10.0.50.100"
+    radius_secret: "YOUR_RADIUS_SECRET"
+
+  tasks:
+    - name: Get organization ID
+      uri:
+        url: "https://api.meraki.com/api/v0/organizations"
+        headers:
+          X-Cisco-Meraki-API-Key: "{{ meraki_api_key }}"
+        method: GET
+        return_content: yes
+      register: orgs_response
+
+    - name: Set fact for organization ID
+      set_fact:
+        org_id: "{{ orgs_response.json | selectattr('name', 'equalto', org_name) | map(attribute='id') | first }}"
+
+    - name: Get network ID
+      uri:
+        url: "https://api.meraki.com/api/v0/organizations/{{ org_id }}/networks"
+        headers:
+          X-Cisco-Meraki-API-Key: "{{ meraki_api_key }}"
+        method: GET
+        return_content: yes
+      register: nets_response
+
+    - name: Set fact for network ID
+      set_fact:
+        net_id: "{{ nets_response.json | selectattr('name', 'equalto', net_name) | map(attribute='id') | first }}"
+
+    - name: Configure RADIUS server
+      uri:
+        url: "https://api.meraki.com/api/v0/networks/{{ net_id }}/radiusServers"
+        headers:
+          X-Cisco-Meraki-API-Key: "{{ meraki_api_key }}"
+        method: POST
+        body_format: json
+        body:
+          host: "{{ ise_ip }}"
+          port: 1812
+          secret: "{{ radius_secret }}"
+      register: radius_response
+
+    - name: Create access policy
+      uri:
+        url: "https://api.meraki.com/api/v0/networks/{{ net_id }}/accessPolicies"
+        headers:
+          X-Cisco-Meraki-API-Key: "{{ meraki_api_key }}"
+        method: POST
+        body_format: json
+        body:
+          name: "ISE_8021X"
+          radiusServers:
+            - host: "{{ ise_ip }}"
+              port: 1812
+              secret: "{{ radius_secret }}"
+          radiusAccountingEnabled: false
+          dot1x:
+            mode: "Single-Host"
+            authenticationMethod: "PEAP-MSCHAPv2"
+      register: access_policy_response
+
+    - name: Apply access policy to switch ports
+      uri:
+        url: "https://api.meraki.com/api/v0/networks/{{ net_id }}/switchPorts"
+        headers:
+          X-Cisco-Meraki-API-Key: "{{ meraki_api_key }}"
+        method: PUT
+        body_format: json
+        body:
+          switchPorts:
+            - portId: "1" # Update with your actual port ID
+              accessPolicyNumber: "{{ access_policy_response.json.accessPolicyNumber }}"
+      register: switch_port_response
