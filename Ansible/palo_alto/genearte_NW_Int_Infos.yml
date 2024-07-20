@@ -18,7 +18,7 @@
           username: "{{ device.username }}"
           password: "{{ device.password }}"
           api_key: "{{ device.api_key }}"
-        cmd: "show interfaces all"
+        cmd: "show interface"
         cmd_is_xml: no
       register: interface_info
 
