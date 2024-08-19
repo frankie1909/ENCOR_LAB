@@ -1,0 +1,17 @@
+---
+- name: Configure IP SLA on Cisco Device
+  hosts: LAB1
+  gather_facts: no
+  
+  tasks:
+    - name: Configure IP SLA ICMP Echo Operation
+      cisco.ios.ios_config:
+        lines:
+            - ip sla 10
+            - icmp-echo 10.0.99.2
+            - frequency 10
+            - timeout 1000
+            - threshold 2
+            - ip sla schedule 10 life forever start-time now
+        parents:
+        save_when: changed

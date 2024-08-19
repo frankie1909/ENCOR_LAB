@@ -1,0 +1,17 @@
+---
+- name: Check Cisco Switch Connectivity
+  hosts: LAB1
+  gather_facts: no
+
+  tasks:
+    - name: Ping Test
+      ios_command:
+        commands:
+          - show ip interface brief
+      register: output
+      tags:
+        - ping_test
+
+    - name: Display Output
+      debug:
+        var: output.stdout_lines

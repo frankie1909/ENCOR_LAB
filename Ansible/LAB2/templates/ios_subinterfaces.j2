@@ -1,0 +1,5 @@
+{% for i in ios_interfaces %}
+interface {{ i.name }}
+ encapsulation dot1q {{ i.tag }}
+{% endfor %}
+

@@ -1,0 +1,5 @@
+hostname: Anisible_Host123
+ansible_user: admin
+ansible_password: Sei8sam!
+ansible_network_os: ios
+ansible_connection: network_cli

@@ -1,0 +1,45 @@
+---
+
+- name: Save Running Configuration to Startup Configuration on Cisco IOS-XE
+
+  hosts: LAB1
+
+  gather_facts: no
+
+
+  tasks:
+
+    - name: Save Running Configuration (Write Memory)
+
+      ios_config:
+
+        lines:
+
+          - write memory
+
+      tags:
+
+        - write_memory
+
+
+    - name: Verify Configuration Saved
+
+      ios_command:
+
+        commands:
+
+          - show startup-config
+
+      register: output
+
+      tags:
+
+        - verify
+
+
+    - name: Display Startup Configuration
+
+      debug:
+
+        var: output.stdout_lines
+
