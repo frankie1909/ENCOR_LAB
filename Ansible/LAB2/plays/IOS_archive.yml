@@ -1,6 +1,6 @@
 ---
 - name: Configure FTP Server and Setup Backup on Cisco IOS
-  hosts: LAB1
+  hosts: switches
   gather_facts: no
   vars:
     ftp_username: admin
@@ -30,8 +30,8 @@
     - name: Create kron policy for configuration backup
       ios_config:
         lines:
-          - kron policy-list {{ kron_policy_name }}
           - cli write memory
+        parents: kron policy-list {{ kron_policy_name }}
         save_when: modified
 
     - name: Schedule kron job for backup at specific time
