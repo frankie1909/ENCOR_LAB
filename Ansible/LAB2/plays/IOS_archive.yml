@@ -1,6 +1,6 @@
 ---
 - name: Configure FTP Server and Setup Backup on Cisco IOS
-  hosts: switches
+  hosts: LAB1
   gather_facts: no
   vars:
     ftp_username: admin
