@@ -1,0 +1,77 @@
+event manager applet backup-config
+ event timer watchdog time 86400
+ action 1.0 cli command "enable"
+ action 2.0 info type routername
+ action 3.0 cli command "copy runn tftp://x.x.x.x/$_info_routername.cfg" pattern "Address"
+ action 4.0 cli command "" pattern "Destination"
+ action 5.0 cli command ""
+
+
+event manager applet "FTP_backup"
+event timer watchdog time 604800
+action 1.0 cli command "enable"
+action 2.0 cli command "copy running-config ftp://admin:Sei8sam!@10.200.10.52 pattern "IP_address"
+action 3.0 cli command "IP_address" pattern "path_name/file_name"
+action 4.0 cli command "path_name/file_name"
+action 5.0 cli command "exit"
+action 6.0 syslog priority informational msg "Configuration successfully written to FTP server"
+
+!EEM
+conf t 
+event manager applet FTP_backup
+!1 day 86400 seconds
+!1 week 604800 seconds
+event timer watchdog time 86400 
+action 1.0 cli command "enable"
+action 2.0 cli command "copy running-config ftp://admin:Sei8sam!@10.200.10.52/ios_backup/backup_config"
+action 3.0 cli command "exit"
+action 4.0 syslog priority informational msg "Configuration successfully written to FTP server"
+end 
+
+!shwo EEM policy:
+show event manager policy registered
+
+!testing EEM
+conf t
+event manager applet FTP_backup
+event none
+action 1.0 cli command "enable"
+action 2.0 cli command "copy running-config ftp://admin:Sei8sam!@10.200.10.52/ios_backup/_Ansible.cfg"
+action 3.0 cli command "exit"
+action 4.0 syslog priority informational msg "Configuration successfully written to FTP server"
+end
+event manager run FTP_backup
+show log | include FTP_backup
+
+
+
+!setup ftp server
+conf t
+ip ftp username admin
+ip ftp password Sei8sam!
+
+!archive
+conf t
+archive 
+  path ftp://10.200.10.52/ios_backup/$h-$t
+  write-memory
+end
+
+!archive crone
+conf t 
+kron policy-list CONFIGURATION_BACKUP
+cli write memory
+exit
+kron occurrence Backup at 09:00 recurring
+policy-list CONFIGURATION_BACKUP
+end
+
+
+conf t
+kron occurrence Backu_Once in 2 oneshot
+policy-list CONFIGURATION_BACKUP
+end
+
+
+
+
