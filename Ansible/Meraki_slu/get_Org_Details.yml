@@ -1,0 +1,16 @@
+---
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Get all Organizations
+      cisco.meraki.organizations_info:
+        meraki_suppress_logging: true
+      register: result
+
+    - name: Show current Org ID
+      ansible.builtin.debug:
+        msg: "{{ result | json_query('meraki_response[*].id') }}"
+    
+    - name: Show current results
+      ansible.builtin.debug:
+        msg: "{{ result }}"

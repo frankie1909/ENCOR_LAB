@@ -1,0 +1,84 @@
+aaa authentication login default group"GROUPNAME"local
+aaa authentication login VTY group"GROUPNAME"local
+aaa authentication login CONSOLE group"GROUPNAME"local
+aaa authentication enable default group"GROUPNAME"enable
+aaa authentication dot1x default group "GROUPNAME"
+aaa authorization exec default group"GROUPNAME"local
+aaa authorization network default group "GROUPNAME"
+aaa authorization commands 0 default group"GROUPNAME"local if-authenticated
+aaa authorization commands 1 default group"GROUPNAME"if-authenticated
+aaa authorization commands 7 default group"GROUPNAME"local if-authenticated
+aaa authorization commands 15 default group"GROUPNAME"local if-authenticated
+aaa authorization auth-proxy default group "GROUPNAME"
+aaa authorization config-commands
+aaa authorization console
+aaa accounting network default
+
+aaa accounting commands 15 default start-stop group ISE_CACGROUP
+aaa accounting system default start-stop group ISE_CACGROUP
+aaa accounting auth-proxy default start-stop group "GROUPNAME"
+aaa accounting dot1x default start-stop group "GROUPNAME"
+aaa accounting update newinfo periodic 2880
+
+aaa server radius dynamic-author
+client <IPaddress> server-key "#" "hash"
+client <IPaddress> server-key "#" "hash"
+client <IPaddress> server-key "#" "hash"
+client <IPaddress> server-key "#" "hash"
+
+radius server "servername"
+address ipv4 <IPaddress> auth-port 1812 acct-port 1813
+automate-tester username srf-test probe-on
+key "key number#" "hash"
+
+radius server "servername"
+address ipv4 <IPaddress> auth-port 1812 acct-port 1813
+automate-tester username srf-test probe-on
+key "key number#" "hash#
+
+radius server "servername"
+address ipv4 <IPaddress> auth-port 1812 acct-port 1813
+automate-tester username srf-test probe-on
+key "key number#" "hash#
+
+radius server "servername"
+address ipv4 <IPaddress> auth-port 1812 acct-port 1813
+automate-tester username srf-test probe-on
+key "key number#" "hash#
+
+radius-server attribute 6 on-for-login-auth
+radius-server attribute 6 support-multiple
+radius-server attribute 8 include-in-access-req
+radius-server attribute 25 access-request include
+radius-server attribute 31 mac format ietf upper-case
+radius-server attribute 31 send nas-port-detail
+radius-server dead-criteria time 5 tries 3
+radius-server deadtime 15
+radius-server vsa send cisco-nas-port
+tacacs server "servername"
+address ipv4 <IPaddress>
+key "key number#" "hash#
+tacacs server "servername"
+address ipv4 <IPaddress>
+key "key number#" "hash#
+tacacs server "servername"
+address ipv4 <IPaddress>
+key "key number#" "hash#
+tacacs server "servername"
+address ipv4 <IPaddress>
+key "key number#" "hash#
+
+aaa group server radius "GROUPNAME"
+server name "servername"
+server name "servername"
+server name "servername"
+server name "servername"
+
+aaa group server tacacs+ ISE_CACGROUP
+server name "servername"
+server name "servername"
+server name "servername"
+server name "servername"
+
+aaa new-model
+aaa session-id common

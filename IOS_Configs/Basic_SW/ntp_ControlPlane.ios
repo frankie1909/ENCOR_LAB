@@ -1,0 +1,17 @@
+! Disable unnecessary services
+no service finger
+no ip bootp server
+no ip domain-lookup
+no ip identd
+
+! Enable CEF
+ip cef
+
+! Control Plane Protection
+control-plane
+ service-policy input CONTROL-PLANE-POLICY
+
+! Configure NTP
+ntp server 192.0.2.3
+ntp access-group peer 10
+access-list 10 permit 192.0.2.0 0.0.0.255

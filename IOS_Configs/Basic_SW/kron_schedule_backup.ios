@@ -1,0 +1,5 @@
+conf t
+CR1(config)# ip ftp username ftp1
+CR1(config)# ip ftp password cisco
+CR1(config)# end
+CR1# 

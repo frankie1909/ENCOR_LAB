@@ -1,0 +1,13 @@
+! Disable unnecessary services
+no ip http server
+no ip http secure-server
+
+! Enable service timestamps
+service timestamps debug datetime msec
+service timestamps log datetime msec
+
+! Set a secure banner
+banner login ^C
+Authorized Access Only!
+Disconnect IMMEDIATELY if you are not an authorized user!
+^C

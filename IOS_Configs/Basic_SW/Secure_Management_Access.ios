@@ -1,0 +1,22 @@
+! Secure VTY lines
+line vty 0 4
+ access-class 10 in
+ exec-timeout 5 0
+ privilege level 15
+ login local
+ transport input ssh
+
+! Secure console access
+line con 0
+ exec-timeout 5 0
+ logging synchronous
+ login local
+ transport output none
+
+! SSH configuration
+ip domain-name secure.local
+crypto key generate rsa modulus 2048
+ip ssh version 2
+ip ssh logging events
+ip ssh timeout 60
+ip ssh authentication-retries 2
