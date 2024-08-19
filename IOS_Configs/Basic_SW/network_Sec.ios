@@ -1,0 +1,19 @@
+! Configure IP source routing
+no ip source-route
+
+! Enable TCP intercept (optional, adjust as needed)
+ip tcp intercept list 100
+ip tcp intercept mode watch
+ip tcp intercept watch-timeout 15
+ip tcp intercept connection-timeout 3600
+
+! Enable logging
+logging buffered 51200 warnings
+logging console emergencies
+logging host 192.0.2.2 transport udp port 514
+
+! Apply ACLs to restrict access
+access-list 100 permit tcp any any established
+access-list 100 permit tcp any any eq 22
+access-list 100 permit udp any any eq snmp
+access-list 100 deny ip any any log

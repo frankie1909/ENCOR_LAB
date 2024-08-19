@@ -1,0 +1,41 @@
+---
+
+- hosts: localhost
+  vars:
+    organization_id: 1581656
+  gather_facts: false
+  tasks:
+
+    - name: Get all organization's devices statuses
+      cisco.meraki.organizations_devices_statuses_info:
+        organizationId: "{{ organization_id }}"
+      register: result
+
+    - name: Filter switch devices and prepare inventory entries
+      set_fact:
+        switch_devices: >-
+          {{
+            result.meraki_response | selectattr('productType', 'equalto', 'switch') | map(
+              attribute='serial') | list
+          }}
+        switches_inventory: >-
+          {{
+            result.meraki_response | selectattr('productType', 'equalto', 'switch') | map(
+              'regex_replace', '^', '- name: {{ item.name }}\n  model: {{ item.model }}\n  serial: {{ item.serial }}\n\n') | list
+          }}
+
+    - name: Write switches inventory to file
+      copy:
+        dest: ./hosts_ms_kostmann
+        content: |-
+          [switches]
+          {% for device in result.meraki_response %}
+          {% if device.productType == 'switch' %}
+          {{ device.name or 'unnamed' }} model={{ device.model }} serial={{ device.serial }}
+          {% endif %}
+          {% endfor %}
+
+    - name: Show result
+      ansible.builtin.debug:
+        msg: "{{ result }}"
+

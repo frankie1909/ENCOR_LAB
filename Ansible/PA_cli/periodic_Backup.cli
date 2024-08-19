@@ -1,0 +1,41 @@
+https://<firewall-ip>/api/?type=keygen&user=<username>&password=<password>
+
+https://10.0.0.116/api/?type=keygen&user=admin&password=Sei8sam!
+
+This XML file does not appear to have any style information associated with it. The document tree is shown below.
+<response status="success">
+<result>
+<key>LUFRPT1xbEJEUXRqNUVnM1BXdkFUS2gyL1ZwbmxPeFU9YTRtVWcrWUFLWGNxT1gxOWI4QmdsbkZ2aFExQUJYb2ZlSkJXNmRTRHNnNEtMUGxnSlFSZXhDeFFreFhJZ3Fudg==</key>
+</result>
+</response>
+
+
+Raspberry PI:
+
+sudo apt-get update
+sudo apt-get install curl cron
+
+
+nano /home/admin/paloalto_backup.sh
+
+Add to file:
+#!/bin/bash
+curl -k -X GET "https://YOUR_FIREWALL_IP/api/?type=export&category=configuration&key=LUFRPT1xbEJEUXRqNUVnM1BXdkFUS2gyL1ZwbmxPeFU9YTRtVWcrWUFLWGNxT1gxOWI4QmdsbkZ2aFExQUJYb2ZlSkJXNmRTRHNnNEtMUGxnSlFSZXhDeFFreFhJZ3Fudg==" -o /BACKUP_DIRECTORY/paloalto_config_$(date +\%Y\%m\%d\%H\%M).xml
+
+Skript ausführbar machen:
+chmod +x /home/admin/paloalto_backup.sh
+
+Cron jobs editieren:
+crontab -e
+
+Folgende Zeile hinzufügen:
+0 2 * * * /home/admin/paloalto_backup.sh
+
+Testen:
+/home/admin/paloalto_backup.sh
+
+Show schedule cron job:
+crontab -l
+
+
+

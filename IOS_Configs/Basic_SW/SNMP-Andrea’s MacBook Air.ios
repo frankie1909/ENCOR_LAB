@@ -1,0 +1,27 @@
+! Enable SNMP with a community string (replace 'public' with your community string)
+snmp-server community public RO
+
+! Specify the SNMP trap receiver (replace '192.0.2.1' with your SNMP server's IP address)
+snmp-server host 192.0.2.1 public
+
+! Enable SNMP traps for various important features
+snmp-server enable traps snmp authentication linkup linkdown coldstart warmstart
+snmp-server enable traps syslog
+
+! Configure the logging level (optional, to control the verbosity of logging)
+logging trap informational
+
+! Specify the source interface for SNMP traps (optional, replace 'GigabitEthernet0/1' with your source interface)
+snmp-server trap-source GigabitEthernet0/1
+
+! Configure logging to include time-stamps
+service timestamps log datetime msec
+
+! Ensure logging is enabled
+logging on
+
+! Optionally configure other logging destinations
+! For example, logging to a syslog server
+logging host 192.0.2.2 transport udp port 514
+
+

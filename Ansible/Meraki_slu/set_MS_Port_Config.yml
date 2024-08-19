@@ -1,0 +1,143 @@
+
+---
+# Notes: 
+# This playbook is designed to configure the switch port settings, you can do all or a selected few ports and you 
+# can configure additional options if you look up the module details
+- hosts: localhost
+  gather_facts: false
+  vars:
+    switch1_serial: Q4CB-5A2N-KS54
+    site_abbv: SYD
+    org_id: 1546963
+    net_id: L_656399645689271615
+    
+
+  tasks:
+    - name: Configure Switch1 Port1 To Router
+      cisco.meraki.devices_switch_ports:
+        meraki_suppress_logging: true
+        state: present
+        serial: "{{ switch1_serial }}"
+        name: Client Access_V20
+        type: access
+        vlan: 20
+        portId: 1
+    
+    - name: Configure switch1 Port2 to AP
+      cisco.meraki.devices_switch_ports:
+        meraki_suppress_logging: true
+        state: present         
+        serial: "{{ switch1_serial }}"
+        name: Client Access_V20
+        type: access
+        vlan: 20
+        portId: 2
+
+    - name: Configure switch1 Port3 to POS Printer
+      cisco.meraki.devices_switch_ports:
+        meraki_suppress_logging: true
+        state: present         
+        serial: "{{ switch1_serial }}"
+        name: POS Printer
+        type: access
+        vlan: 20
+        portId: 3
+
+    - name: Configure switch1 Port4 to Printer
+      cisco.meraki.devices_switch_ports:
+        meraki_suppress_logging: true
+        state: present         
+        serial: "{{ switch1_serial }}"
+        name: Printer 2
+        type: access
+        vlan: 20
+        portId: 4
+
+    - name: Configure switch1 Port5
+      cisco.meraki.devices_switch_ports:
+        meraki_suppress_logging: true
+        state: present         
+        serial: "{{ switch1_serial }}"
+        name: Indoor Kamera 
+        type: access
+        vlan: 50
+        portId: 5
+
+    - name: Configure switch1 Port6
+      cisco.meraki.devices_switch_ports:
+        meraki_suppress_logging: true
+        state: present         
+        serial: "{{ switch1_serial }}"
+        name: Outdoor Kamera 
+        type: access
+        vlan: 50
+        portId: 6
+
+    - name: Configure switch1 Port7
+      cisco.meraki.devices_switch_ports:
+        meraki_suppress_logging: true
+        state: present         
+        serial: "{{ switch1_serial }}"
+        name: Uplink_LAG 
+        type: trunk
+        vlan: 1
+        portId: 7
+
+    - name: Configure switch1 Port8
+      cisco.meraki.devices_switch_ports:
+        meraki_suppress_logging: true
+        state: present         
+        serial: "{{ switch1_serial }}"
+        name: Uplink_LAG 
+        type: trunk
+        vlan: 1
+        portId: 8
+    
+    - name: Create LAG
+      cisco.meraki.networks_switch_link_aggregations:
+        state: present
+        networkId: '{{ net_id }}'
+        switchPorts:
+          - portId: '7'
+            serial: "{{ switch1_serial }}"
+          - portId: '8'
+            serial: "{{ switch1_serial }}"
+      tags:
+        - createLAG
+
+
+#    - name: Get all networks _switch _linkaggregations
+#      cisco.meraki.networks_switch_link_aggregations_info:
+#        networkId: '{{ net_id }}'
+#      register: result
+#      tags:
+#        - deleteLAG1
+#
+#    - name: Show result
+#      ansible.builtin.debug:
+#        msg: "{{ result }}"
+#      tags:
+#        - deleteLAG1      
+#    
+#    - name: Retrieve existing link aggregations
+#      cisco.meraki.networks_switch_link_aggregations_info:
+#        networkId: '{{ net_id }}'
+#      register: link_aggregations
+#      tags:
+#        - deleteLAG
+#
+#    - name: Set linkAggregationId for LAG_9_10
+#      set_fact:
+#        link_aggregation_id: "{{ item.id }}"
+#      loop: "{{ link_aggregations.data }}"
+#      when: item.name == 'LAG_9_10'
+#      tags:
+#        - deleteLAG
+#
+#    - name: Delete LAG
+#      cisco.meraki.networks_switch_link_aggregations:
+#        state: absent
+#        networkId: '{{ net_id }}'
+#        linkAggregationId: 'MTk4ODcyMzA5OTI1MjY5XzA='
+#      tags:
+#        - deleteLAG2

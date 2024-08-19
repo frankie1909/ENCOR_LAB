@@ -1,0 +1,9 @@
+! Enable AAA
+aaa new-model
+
+! Configure local user
+username admin privilege 15 secret 5 $1$abc$1234567890abcdefg
+
+! AAA authentication and authorization
+aaa authentication login default local
+aaa authorization exec default local

@@ -1,0 +1,21 @@
+conf t
+    ip ftp username ftp1
+    ip ftp password cisco
+end 
+
+!FTP Verbindung testen:
+copy running-config ftp:
+... IP-Adress FTP server
+... Filename /path/filename.cfg
+
+!Kron Job einrichten:
+conf t
+    kron policy-list Backup_FTP
+    cli show run | redirect ftp://10.200.10.52/ios_backup/L2SW001.cfg
+    exit
+    kron occurrence Backup at 01:30 Tue recurring
+    policy-list Backup_FTP
+    end
+
+!anzeigen der geplanten Kron schedule
+show kron schedule
