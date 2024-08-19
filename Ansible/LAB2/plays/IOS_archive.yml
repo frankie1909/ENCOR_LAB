@@ -18,12 +18,13 @@
           - ip ftp password {{ ftp_password }}
         save_when: modified
 
-    - name: Configure archive to FTP server with write-memory option
+    - name: Enter archive configuration mode
       ios_config:
         lines:
-          - archive 
+          - archive
           - path ftp://{{ ftp_server }}/{{ backup_path }}/$h-$t
           - write-memory
+        parents: archive
         save_when: modified
 
     - name: Create kron policy for configuration backup
