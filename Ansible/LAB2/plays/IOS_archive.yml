@@ -1,0 +1,46 @@
+---
+- name: Configure FTP Server and Setup Backup on Cisco IOS
+  hosts: LAB1
+  gather_facts: no
+  vars:
+    ftp_username: admin
+    ftp_password: Sei8sam!
+    ftp_server: 10.200.10.52
+    backup_path: ios_backup
+    kron_policy_name: CONFIGURATION_BACKUP
+    kron_time: "09:00"
+
+  tasks:
+    - name: Configure FTP username and password
+      ios_config:
+        lines:
+          - ip ftp username {{ ftp_username }}
+          - ip ftp password {{ ftp_password }}
+        save_when: modified
+
+    - name: Configure archive to FTP server with write-memory option
+      ios_config:
+        lines:
+          - archive 
+          - path ftp://{{ ftp_server }}/{{ backup_path }}/$h-$t
+          - write-memory
+        save_when: modified
+
+    - name: Create kron policy for configuration backup
+      ios_config:
+        lines:
+          - kron policy-list {{ kron_policy_name }}
+          - cli write memory
+        save_when: modified
+
+    - name: Schedule kron job for backup at specific time
+      ios_config:
+        lines:
+          - kron occurrence Backup at {{ kron_time }} recurring
+          - policy-list {{ kron_policy_name }}
+        save_when: modified
+
+    - name: End configuration
+      ios_command:
+        commands:
+          - end
