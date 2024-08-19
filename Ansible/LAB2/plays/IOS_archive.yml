@@ -7,8 +7,8 @@
     ftp_password: Sei8sam!
     ftp_server: 10.200.10.52
     backup_path: ios_backup
-    kron_policy_name: CONFIGURATION_BACKUP
-    kron_time: "09:00"
+    kron_policy_name: CONFIGURATION_BACKUP1
+    kron_time: "09:15"
 
   tasks:
     - name: Configure FTP username and password
@@ -37,7 +37,7 @@
     - name: Schedule kron job for backup at specific time
       ios_config:
         lines:
-          - kron occurrence Backup at {{ kron_time }} recurring
+          - kron occurrence Backup1 at {{ kron_time }} recurring
           - policy-list {{ kron_policy_name }}
         save_when: modified
 
