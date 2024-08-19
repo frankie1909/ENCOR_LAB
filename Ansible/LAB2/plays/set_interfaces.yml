@@ -1,0 +1,73 @@
+---
+
+- name: "IOS Gather Facts"
+
+  hosts: LAB1
+
+  connection: network_cli
+
+  gather_facts: yes
+
+  vars:
+
+    ios_interfaces:
+
+      - name: GigabitEthernet4.100
+
+        tag: 100
+
+        ipv4:
+
+          address: 10.10.100.1/24
+
+      - name: GigabitEthernet4.101
+
+        tag: 101
+
+        ipv4:
+
+          address: 10.10.101.1/24
+
+      - name: GigabitEthernet4.102
+
+        tag: 102
+
+        ipv4:
+
+          address: 10.10.102.1/24
+
+      - name: GigabitEthernet4.103
+
+        tag: 103
+
+        ipv4:
+
+          address: 10.10.103.1/24
+
+      - name: GigabitEthernet4.104
+
+        tag: 104
+
+        ipv4:
+
+          address: 10.10.104.1/24
+
+  tasks:
+
+    - name: "Set Interface Config Sheet"
+
+      template:
+
+        src: ../templates/ios_subinterfaces.j2
+
+        dest: '../configs/{{ inventory_hostname }}_vlan_config.txt'
+
+
+    - name: "Apply Layer 2 Configuration"
+
+      cisco.ios.ios_config:
+
+        src: '../configs/{{ inventory_hostname }}_vlan_config.txt'
+
+
+    - name: "Debug Interface Info"
