@@ -1,0 +1,6 @@
+! VTP VLAN configuration not allowed when device is not the primary server for vlan database.
+! in exec mode
+SW1#vtp primary
+This system is becoming primary server for feature vlan
+No conflicting VTP3 devices found.
+Do you want to continue? [confirm]

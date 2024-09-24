@@ -970,3 +970,8 @@ ntp server 192.168.100.79
 end
 
 NTK-SW-CORE#
+
+
+!!!!
+interface Vlan254
+ ip address 10.200.254.172 255.255.255.0

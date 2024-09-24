@@ -1,0 +1,8 @@
+conf t
+router ospf 1
+router-id IP_address
+passive-interface default
+network 0.0.0.0 255.255.255.255 area 0
+no passive-interface Uplink
+no passive-interface Downlink
+

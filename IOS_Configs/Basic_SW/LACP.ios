@@ -1,0 +1,15 @@
+interface GigabitEthernet0/1
+ description LACP2SW1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport nonegotiate
+ negotiation auto
+ channel-group 1 mode active
+!
+interface GigabitEthernet0/2
+ description LACP2SW1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport nonegotiate
+ negotiation auto
+ channel-group 1 mode active
