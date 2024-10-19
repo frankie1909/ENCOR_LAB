@@ -1,0 +1,201 @@
+hostname SW1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$j1I3$i9RB75ucd/FU01.Ocdn7C/
+!
+username admin privilege 15 secret 5 $1$wRPJ$oVmC7Exv9REr5WQ8HtBoX1
+username backup privilege 15 secret 5 $1$a0BE$Uq6ZGxPGYJbHNfTryF19e0
+aaa new-model
+!
+!
+aaa group server radius SRV-radius
+!
+aaa authentication enable default group tacacs+ enable none
+!
+!
+!
+!
+!
+!
+aaa session-id common
+!
+!
+!
+!
+!
+!
+!
+!
+ip domain-name slu.int
+ip name-server 8.8.8.8
+ip cef
+no ipv6 cef
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+!
+!
+!
+!
+!
+!
+crypto isakmp policy 10
+ encr aes
+ authentication pre-share
+ group 14
+crypto isakmp key SilvansKey address 172.168.0.2     255.255.255.252
+!
+!
+crypto ipsec transform-set IPSecTransform esp-aes esp-sha-hmac
+ mode tunnel
+!
+!
+!
+crypto map MYCryptoMAP 10 ipsec-isakmp
+ set peer 10.0.0.10
+ set transform-set IPSecTransform
+ match address GREList
+!
+!
+!
+!
+!
+interface Port-channel1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport nonegotiate
+!
+interface Tunnel1
+ ip address 172.168.0.1 255.255.255.252
+ tunnel source GigabitEthernet0/3
+ tunnel destination 10.0.0.10
+!
+interface GigabitEthernet0/0
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 77
+ switchport mode trunk
+ switchport nonegotiate
+ negotiation auto
+!
+interface GigabitEthernet0/1
+ description LACP2SW2
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport nonegotiate
+ negotiation auto
+ channel-group 1 mode active
+!
+interface GigabitEthernet0/2
+ description LACP2SW2
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport nonegotiate
+ negotiation auto
+ channel-group 1 mode active
+!
+interface GigabitEthernet0/3
+ no switchport
+ ip address 10.0.0.5 255.255.255.252
+ negotiation auto
+ crypto map MYCryptoMAP
+!
+interface GigabitEthernet1/0
+ negotiation auto
+!
+interface GigabitEthernet1/1
+ negotiation auto
+!
+interface GigabitEthernet1/2
+ negotiation auto
+!
+interface GigabitEthernet1/3
+ negotiation auto
+!
+interface GigabitEthernet2/0
+ negotiation auto
+!
+interface GigabitEthernet2/1
+ negotiation auto
+!
+interface GigabitEthernet2/2
+ negotiation auto
+!
+interface GigabitEthernet2/3
+ negotiation auto
+!
+interface Vlan254
+ ip address 10.200.254.171 255.255.255.0
+!
+router ospf 1
+ network 0.0.0.0 255.255.255.255 area 0
+!
+ip default-gateway 10.200.254.1
+ip forward-protocol nd
+!
+ip http server
+!
+ip route 0.0.0.0 0.0.0.0 10.200.254.1
+ip ssh version 2
+ip ssh server algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+ip ssh client algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+!
+ip access-list extended GREList
+ permit gre any any
+!
+!
+!
+!
+!
+!
+!
+control-plane
+!
+banner exec ^C
+IOSv - Cisco Systems Confidential -
+
+Supplemental End User License Restrictions
+
+This IOSv software is provided AS-IS without warranty of any kind. Under no circumstances may this software be used separate from the Cisco Modeling Labs Software that this software was provided with, or deployed or used as part of a production environment.
+
+By using the software, you agree to abide by the terms and conditions of the Cisco End User License Agreement at http://www.cisco.com/go/eula. Unauthorized use or distribution of this software is expressly prohibited.
+^C
+banner incoming ^C
+IOSv - Cisco Systems Confidential -
+
+Supplemental End User License Restrictions
+
+This IOSv software is provided AS-IS without warranty of any kind. Under no circumstances may this software be used separate from the Cisco Modeling Labs Software that this software was provided with, or deployed or used as part of a production environment.
+
+By using the software, you agree to abide by the terms and conditions of the Cisco End User License Agreement at http://www.cisco.com/go/eula. Unauthorized use or distribution of this software is expressly prohibited.
+^C
+banner login ^CC
+  _______________________________________
+/ UNAUTHORIZED ACCESS TO THIS DEVICE IS   \\
+| PROHIBITED    You must have explicit,   |
+| authorized permission to access or      |
+| configure this device. Unauthorized     |
+| attempts and actions to access or use   |
+| this system may result in civil and/or  |
+| criminal penalties. All activities      |
+| performed on this device are logged and |
+\\ monitored.                              /
+  ---------------------------------------
+         \   ^C
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ exec-timeout 5 0
+ logging synchronous
+ transport input ssh
+ transport output ssh
+!
+!
+end
