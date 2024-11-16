@@ -1,0 +1,57 @@
+“interface Loopback0
+ ipv6 address 2001:DB8::1/128
+ ospfv3 1 ipv6 area 0
+!
+interface GigabitEthernet0/1
+ ipv6 address FE80::1 link-local
+ ipv6 address 2001:DB8:0:1::1/64
+ ospfv3 1 ipv6 area 0
+!
+interface GigabitEthernet0/0
+ ipv6 address FE80::1 link-local
+ ipv6 address 2001:DB8:0:12::1/64
+ ospfv3 1 ipv6 area 0
+!
+router ospfv3 1
+ router-id 192.168.1.1
+ 
+R2
+interface Loopback0
+ ipv6 address 2001:DB8::2/128
+ ospfv3 1 ipv6 area 0
+!
+interface GigabitEthernet0/0
+ ipv6 address FE80::2 link-local
+
+ipv6 address 2001:DB8:0:12::2/64
+ospfv3 1 ipv6 area 0
+!
+interface GigabitEthernet0/3
+ ipv6 address FE80::2 link-local
+ ospfv3 1 ipv6 area 0
+!
+router ospfv3 1
+ router-id 192.168.2.2
+ 
+R3
+interface Loopback0
+ ipv6 address 2001:DB8::3/128
+ ospfv3 1 ipv6 area 0
+!
+interface GigabitEthernet0/2
+ ipv6 address FE80::3 link-local
+ ipv6 address 2001:DB8:0:23::3/64
+ ospfv3 1 ipv6 area 0
+!
+interface GigabitEthernet0/4
+ ipv6 address FE80::3 link-local
+ ipv6 address 2001:DB8:0:34::3/64
+ ospfv3 1 ipv6 area 34
+!
+router ospfv3 1
+ router-id 192.168.3.3”
+
+Excerpt From
+CCNP and CCIE Enterprise Core: ENCOR 350-401, Second Edition (for True Epub)
+Bradley Edgeworth
+This material may be protected by copyright.

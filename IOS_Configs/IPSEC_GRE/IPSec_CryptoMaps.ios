@@ -1,0 +1,44 @@
+!R1
+crypto isakmp policy 10 
+    hash sha256
+    encryption aes 256 
+    authentication pre-share 
+    group 14
+!
+crypto isakmp key 31DAYS address
+10.10.3.2
+!
+crypto ipsec transform-set MYSET 
+esp-aes 256 esp-sha-hmac
+    mode transport
+!
+crypto map MYMAP 10 ipsec-isakmp 
+    set peer 10.10.3.2
+    set transform-set MYSET
+    match address 100
+!
+interface Tunnel0
+    ip address 172.16.99.1 255.255.255.0 
+    tunnel source GigabitEthernet0/0 
+    tunnel destination 10.10.3.2
+    ip mtu 1400
+    bandwidth 1000
+!
+interface GigabitEthernet0/0
+    ip address 10.10.1.1 255.255.255.0
+    crypto map MYMAP
+!
+access-list 100 permit gre 
+host 10.10.1.1
+host 10.10.3.2
+!
+router ospf 1
+    router-id 0.0.0.1
+    network 172.16.99.0 0.0.0.255 area 0
+    network 172.16.1.0 0.0.0.255 area 1
+    network 172.16.11.0 0.0.0.255 area 1
+!
+!
+
+!R4
+

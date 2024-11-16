@@ -50,6 +50,7 @@ crypto isakmp policy 10
  authentication pre-share
  group 14
 crypto isakmp key SilvansKey address 172.168.0.2     255.255.255.252
+!crypto isakmp key SilvansKey address 172.168.0.1     255.255.255.252
 !
 !
 crypto ipsec transform-set IPSecTransform esp-aes esp-sha-hmac
@@ -58,7 +59,7 @@ crypto ipsec transform-set IPSecTransform esp-aes esp-sha-hmac
 !
 !
 crypto map MYCryptoMAP 10 ipsec-isakmp
- set peer 10.0.0.10
+ set peer 10.0.0.5
  set transform-set IPSecTransform
  match address GREList
 !

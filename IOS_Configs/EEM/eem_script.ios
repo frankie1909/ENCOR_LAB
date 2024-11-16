@@ -1,0 +1,18 @@
+
+event manager applet interface_Shutdown
+event syslog pattern "Interface Ethernet0/0, changed state to administratively down"
+action 1.0 cli command "enable"
+action 1.5 cli command "config t"
+action 2.0 cli command "interface e0/0"
+action 2.5 cli command "no shutdown"
+action 3.0 cli command "end"
+action 3.5 cli command "who"
+action 4.0 mail server "192.168.1.1" to ".engineer@cisco.com." from ".EEM@cisco.com." subject ".ISP1_Interface_Ethernet0/0_SHUT." body "Current users $_cli_result"
+end
+
+event manager applet Stop_Debug
+event cli pattern "debug" sync no skip yes
+action 1.0 cli command "enable"
+action 2.0 cli command "sh users | append unix:Debug"
+action 3.0 cli command "sh clock | append unix:Debug_clock"
+end

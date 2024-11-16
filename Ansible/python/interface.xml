@@ -1,0 +1,15 @@
+<config xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+  <interfaces xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
+    <interface>
+      <name>GigabitEthernet{{ INTERFACE_INDEX }}</name>
+      <type xmlns:ianaift="urn:ietf:params:xml:ns:yang:iana-if-type">ianaift:ethernetCsmacd</type>
+      <enabled>true</enabled>
+      <ipv4 xmlns="urn:ietf:params:xml:ns:yang:ietf-ip">
+        <address>
+          <ip>{{ IP_ADDRESS }}</ip>
+          <netmask>{{ SUBNET_MASK }}</netmask>
+        </address>
+      </ipv4>
+    </interface>
+  </interfaces>
+</config>
