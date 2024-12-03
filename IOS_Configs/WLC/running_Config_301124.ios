@@ -1,0 +1,570 @@
+9800-1#show run
+Building configuration...
+
+Current configuration : 19792 bytes
+!
+! Last configuration change at 07:08:00 GMT Sat Nov 30 2024 by ssh_admin
+! NVRAM config last updated at 07:02:05 GMT Sat Nov 30 2024
+!
+version 17.9
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service call-home
+platform qfp utilization monitor load 80
+platform punt-keepalive disable-kernel-core
+platform console virtual
+!
+hostname 9800-1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no aaa new-model
+clock timezone GMT 0 0
+clock calendar-valid
+vtp mode off
+vtp version 1
+!
+!
+!
+!
+!
+!
+!
+ip name-server 8.8.8.8 10.0.50.101
+ip dhcp excluded-address 10.0.21.0 10.0.21.49
+!
+ip dhcp pool internal
+ network 10.0.21.0 255.255.255.0
+ default-router 10.0.21.15
+ dns-server 10.0.50.101 8.8.8.8
+ domain-name slu.int
+ lease infinite
+!
+!
+!
+login on-success log
+!
+!
+!
+!
+!
+!
+!
+subscriber templating
+!
+!
+!
+!
+!
+!
+flow exporter wireless-local-exporter
+ destination local wlc
+!
+!
+flow monitor wireless-avc-basic
+ exporter wireless-local-exporter
+ cache timeout active 60
+ record wireless avc basic
+!
+!
+flow monitor wireless-avc-basic-ipv6
+ exporter wireless-local-exporter
+ cache timeout active 60
+ record wireless avc ipv6 basic
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+pae
+!
+!
+crypto pki server WLC_CA
+ database archive pkcs12 password 7 01300F175804575D72
+ issuer-name O=Cisco Virtual Wireless LAN Controller, CN=CA-vWLC_9800-1
+ grant auto
+ hash sha256
+ lifetime certificate 3652
+ lifetime ca-certificate 3652
+ shutdown
+!
+crypto pki trustpoint SLA-TrustPoint
+ enrollment pkcs12
+ revocation-check crl
+!
+crypto pki trustpoint TP-self-signed-3461108352
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-3461108352
+ revocation-check none
+ rsakeypair TP-self-signed-3461108352
+!
+crypto pki trustpoint WLC_CA
+ revocation-check crl
+ rsakeypair WLC_CA
+!
+crypto pki trustpoint 9800-1_WLC_TP
+ enrollment url http://10.0.78.99:80
+ serial-number
+ password 7 047802150C2E1D1C5A
+ subject-name O=Cisco Virtual Wireless LAN Controller, CN=9800-1_WLC_TP
+ revocation-check crl
+ rsakeypair 9800-1_WLC_TP
+ hash sha256
+ eku request server-auth client-auth
+!
+!
+crypto pki certificate chain SLA-TrustPoint
+ certificate ca 01
+  30820321 30820209 A0030201 02020101 300D0609 2A864886 F70D0101 0B050030
+  32310E30 0C060355 040A1305 43697363 6F312030 1E060355 04031317 43697363
+  6F204C69 63656E73 696E6720 526F6F74 20434130 1E170D31 33303533 30313934
+  3834375A 170D3338 30353330 31393438 34375A30 32310E30 0C060355 040A1305
+  43697363 6F312030 1E060355 04031317 43697363 6F204C69 63656E73 696E6720
+  526F6F74 20434130 82012230 0D06092A 864886F7 0D010101 05000382 010F0030
+  82010A02 82010100 A6BCBD96 131E05F7 145EA72C 2CD686E6 17222EA1 F1EFF64D
+  CBB4C798 212AA147 C655D8D7 9471380D 8711441E 1AAF071A 9CAE6388 8A38E520
+  1C394D78 462EF239 C659F715 B98C0A59 5BBB5CBD 0CFEBEA3 700A8BF7 D8F256EE
+  4AA4E80D DB6FD1C9 60B1FD18 FFC69C96 6FA68957 A2617DE7 104FDC5F EA2956AC
+  7390A3EB 2B5436AD C847A2C5 DAB553EB 69A9A535 58E9F3E3 C0BD23CF 58BD7188
+  68E69491 20F320E7 948E71D7 AE3BCC84 F10684C7 4BC8E00F 539BA42B 42C68BB7
+  C7479096 B4CB2D62 EA2F505D C7B062A4 6811D95B E8250FC4 5D5D5FB8 8F27D191
+  C55F0D76 61F9A4CD 3D992327 A8BB03BD 4E6D7069 7CBADF8B DF5F4368 95135E44
+  DFC7C6CF 04DD7FD1 02030100 01A34230 40300E06 03551D0F 0101FF04 04030201
+  06300F06 03551D13 0101FF04 05300301 01FF301D 0603551D 0E041604 1449DC85
+  4B3D31E5 1B3E6A17 606AF333 3D3B4C73 E8300D06 092A8648 86F70D01 010B0500
+  03820101 00507F24 D3932A66 86025D9F E838AE5C 6D4DF6B0 49631C78 240DA905
+  604EDCDE FF4FED2B 77FC460E CD636FDB DD44681E 3A5673AB 9093D3B1 6C9E3D8B
+  D98987BF E40CBD9E 1AECA0C2 2189BB5C 8FA85686 CD98B646 5575B146 8DFC66A8
+  467A3DF4 4D565700 6ADF0F0D CF835015 3C04FF7C 21E878AC 11BA9CD2 55A9232C
+  7CA7B7E6 C1AF74F6 152E99B7 B1FCF9BB E973DE7F 5BDDEB86 C71E3B49 1765308B
+  5FB0DA06 B92AFE7F 494E8A9E 07B85737 F3A58BE1 1A48A229 C37C1E69 39F08678
+  80DDCD16 D6BACECA EEBC7CF9 8428787B 35202CDC 60E4616A B623CDBD 230E3AFB
+  418616A9 4093E049 4D10AB75 27E86F73 932E35B5 8862FDAE 0275156F 719BB2F0
+  D697DF7F 28
+  	quit
+crypto pki certificate chain TP-self-signed-3461108352
+ certificate self-signed 01
+  30820330 30820218 A0030201 02020101 300D0609 2A864886 F70D0101 05050030
+  31312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 43657274
+  69666963 6174652D 33343631 31303833 3532301E 170D3234 30353130 32313536
+  33375A17 0D333430 35313032 31353633 375A3031 312F302D 06035504 03132649
+  4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D33 34363131
+  30383335 32308201 22300D06 092A8648 86F70D01 01010500 0382010F 00308201
+  0A028201 0100B987 A0D02B83 BC8914BF 9A2A4377 62EE0807 D9ACE5DB 2DC8B290
+  849BFBC3 F29DD893 9AEC0FB4 2AEDFFCB 554DD7A4 967E3874 18B6BB7E 78E1FE05
+  AB99F6D7 E391E6C8 D58782C3 6780A1C8 6826B2CF 0AE9D25A 2D49FAC6 D2AE02D2
+  5501039D ABF5CD89 71ABFDC3 B7EA05FA FF966D7B B4E1C46A 9B00B5BC E48F7CAE
+  2048000F 705A42F5 42A02763 71FCEFB9 3FCAA90B 45222423 B00B3A77 7ED06901
+  29F1A9D1 1C4481F8 8B6D3D3F 66C79C7E C5801A5E D0D0D5D5 137490D4 8CB87485
+  F131A9FD E3AC05CB 326503F8 310B2F22 75511CDD FE3AD573 5AEF15E0 32B4F190
+  F2FF63D2 ED8C7D61 35FE1BDC 68EC4600 42B35E23 B490C42E 6471BF57 9C81AFD8
+  57296103 B7450203 010001A3 53305130 0F060355 1D130101 FF040530 030101FF
+  301F0603 551D2304 18301680 14376E75 1A594FA3 0E7F6D60 498CFF61 7F043C9C
+  CB301D06 03551D0E 04160414 376E751A 594FA30E 7F6D6049 8CFF617F 043C9CCB
+  300D0609 2A864886 F70D0101 05050003 82010100 B17740A1 90A2A4A2 31198E69
+  FF07954D A42B8101 813FD96C C7DF0DD8 1D611B97 EF2BF158 269B2400 961ED960
+  5ABC6B92 96F0F5D3 1F75505E 2809432D 8155DACE E80374DE 76895154 B7DB24A2
+  704BE761 6DB316B6 6135D330 0F791BBB 579475DF 803AE10D A0F57D9A 288820BD
+  B7F0A0CC 343D8794 4723EE6D 79308951 3D536F8D 6F88B21A EE4DBF6B B94C7BE4
+  8DD710F8 FB722A25 D80E9693 D69F824C 866ACF53 33EB2EC9 51C9095B CBB8391C
+  9748B21E D92CC63B D6E9B377 BBA5E257 7C2E5779 D8013243 DA06F7C1 F5A1E05D
+  37FF1839 9AB29DB8 B9E32F2C A83A1538 F85AFE08 187C5481 71234BBC 3D5559A0
+  BA248D0A 72995726 354E6342 CECCAF9D 60648056
+  	quit
+crypto pki certificate chain WLC_CA
+ certificate ca 01
+  30820370 30820258 A0030201 02020101 300D0609 2A864886 F70D0101 0B050030
+  49311730 15060355 04030C0E 43412D76 574C435F 39383030 2D31312E 302C0603
+  55040A13 25436973 636F2056 69727475 616C2057 6972656C 65737320 4C414E20
+  436F6E74 726F6C6C 6572301E 170D3234 30353135 31393231 30375A17 0D333430
+  35313531 39323130 375A3049 31173015 06035504 030C0E43 412D7657 4C435F39
+  3830302D 31312E30 2C060355 040A1325 43697363 6F205669 72747561 6C205769
+  72656C65 7373204C 414E2043 6F6E7472 6F6C6C65 72308201 22300D06 092A8648
+  86F70D01 01010500 0382010F 00308201 0A028201 0100D677 26B33FBB 5DB99E52
+  5C3450E8 CDD771F2 591957CD 45D88FDE CE43A4C6 7772BAE8 87452B38 94D1602B
+  3C4D3AC4 9DC4D1C5 26CD4584 4D4E8C4A 84DBFDCB 4915A181 72826D06 9DDAE9CF
+  F5CD7412 F0286E6D 0F6845E9 709DAEAE 3A9D8724 52E6A333 10289FB5 5BFAA83F
+  FE4CAB96 77FA4673 1AF66B56 6EB5D191 866186FE 254059C1 373DB6F3 B17261E8
+  20549555 A4DF48B7 22212A78 2259B1FC A6CF5D8B D2ACE5EC AC4055B6 A8E7DFFD
+  8CBD9640 BF588149 B471B456 800D57DA 30ED4831 BC1DBBC0 B3E0591D BD18597E
+  0592E1B1 0AE5352A 2B6068BF 2479981B 521F7325 3AECEFDF 9E21BA8A 53B2453D
+  A1EEABAB 87CFEFBF 4D447F75 31E0A7C2 94C29697 926B0203 010001A3 63306130
+  0F060355 1D130101 FF040530 030101FF 300E0603 551D0F01 01FF0404 03020186
+  301F0603 551D2304 18301680 14740FF6 2FD86C06 ADC251A7 3B95087E 92D88FF2
+  66301D06 03551D0E 04160414 740FF62F D86C06AD C251A73B 95087E92 D88FF266
+  300D0609 2A864886 F70D0101 0B050003 82010100 C4C60F57 BF624445 81266F5B
+  AD4BED2D 85E0127D AF5FE62D 28F968E0 FEB6DE61 79FFB6C0 8CD1B85D B71A7E49
+  4B34B72F 8BEDB2E6 567E661D EA415783 53DBE8EA 62F99DCB 861A207A 99127F6C
+  6494DFDA 2BB99DB9 B1BE4319 87E24400 1869E383 A633FB72 D596B3E8 02EA1D69
+  D4AE467F C8B8E60A 0C4AEF9F 97947C51 59DDDC69 790E92B1 B5CFD7E4 E1EEB414
+  11490BF7 45E09331 6B41CB0B C72CCE0C 0A448AD0 7EAE664B 08C627D3 67B0876B
+  512B3C02 7267C9D7 A7B495E6 03F53F19 12395AD5 E49E6D4B C6A1A791 7A0B4BE0
+  D5003A9F 908AB6EB 3B013FB3 B75C6314 C01EAEA2 212A48E9 B46FAA80 0116393F
+  DECB38D1 E77BE658 1AD69019 7C8C9DD2 1CD2839B
+  	quit
+crypto pki certificate chain 9800-1_WLC_TP
+ certificate 02
+  308203A5 3082028D A0030201 02020102 300D0609 2A864886 F70D0101 0B050030
+  49311730 15060355 04030C0E 43412D76 574C435F 39383030 2D31312E 302C0603
+  55040A13 25436973 636F2056 69727475 616C2057 6972656C 65737320 4C414E20
+  436F6E74 726F6C6C 6572301E 170D3234 30353135 31393231 31315A17 0D333430
+  35313531 39323130 375A3073 31163014 06035504 030C0D39 3830302D 315F574C
+  435F5450 312E302C 06035504 0A132543 6973636F 20566972 7475616C 20576972
+  656C6573 73204C41 4E20436F 6E74726F 6C6C6572 31293012 06035504 05130B39
+  39544951 43565349 36313013 06092A86 4886F70D 01090216 06393830 302D3130
+  82012230 0D06092A 864886F7 0D010101 05000382 010F0030 82010A02 82010100
+  BC678AC1 2636C276 55ACEB11 8D22AD18 72926B9C 2D0B74DB 8C046E9A 4D01F7B5
+  3A044828 79B24745 ED8C87F2 17A0241D 9E0B1950 2E255DC7 66F3D22C 27E30498
+  EBB709CD 87A43393 1A016DB0 32F0CCCE A57C26C3 51D2BB4E FEC8E2B9 390876AE
+  9869C55F 45695288 350C7438 F46FAB9D 38705879 A0267EB3 7A6F1471 224DC746
+  6B6B0E15 952C743A 98A7EB7E 67D0CFDA 7D4D8AF4 8FF4BC86 E9F6B659 58E8B2FA
+  13A59AB6 51AB07A6 282677EC EF6062FA 42E63313 920561ED 7B2741CC FF434C64
+  606209FE B31F48A4 D2148C11 72B70FE9 23911FA0 2C7257B6 13BCD7CD 1A17CEF3
+  94609D73 6A6FDC54 1B95E19B 6AED525C 0400BC61 AED3A664 4770703C 293AD3BD
+  02030100 01A36E30 6C301D06 03551D25 04163014 06082B06 01050507 03010608
+  2B060105 05070302 300B0603 551D0F04 04030205 A0301F06 03551D23 04183016
+  8014740F F62FD86C 06ADC251 A73B9508 7E92D88F F266301D 0603551D 0E041604
+  142812EF 4F9895F5 6C69FD03 6430C7BE C551CC2A F0300D06 092A8648 86F70D01
+  010B0500 03820101 00B9956F BCDFEB16 3ED9849C F984D23F E20D19CB 7F3F4C7C
+  6F61F228 800EBA7B FF7056D5 8EA080FA 1C9C4AC6 362BB210 55D1CB30 13740A4D
+  9D4ABE61 9B9AF410 2DA43597 ADE0D737 09D01433 18FF2FB4 3C9D4683 D0B79E64
+  5B0DA040 725FBA18 9B524A45 9614F75E 7186193E 4318AA1B A3F3B828 CA8A77BB
+  1F69350C 6CFB7A55 6EB0CE04 B7C93AA7 8F1E3B41 50DEECE7 1BEF7090 00231A59
+  161B18DE CD7F0A11 3947E242 416DC2DD A42B933B 5F1E47BF BD4C5AF8 00C5F83F
+  6287E633 31672B45 0D517542 9DCD7D55 2E322B82 CE49679E 770987B1 D3361D7B
+  362561FD 79CE973C D7FDF838 76B8F8AE CE8068C9 77F2ADB4 C40358E3 2C4381A9
+  F7409D98 7266D787 36
+  	quit
+ certificate ca 01
+  30820370 30820258 A0030201 02020101 300D0609 2A864886 F70D0101 0B050030
+  49311730 15060355 04030C0E 43412D76 574C435F 39383030 2D31312E 302C0603
+  55040A13 25436973 636F2056 69727475 616C2057 6972656C 65737320 4C414E20
+  436F6E74 726F6C6C 6572301E 170D3234 30353135 31393231 30375A17 0D333430
+  35313531 39323130 375A3049 31173015 06035504 030C0E43 412D7657 4C435F39
+  3830302D 31312E30 2C060355 040A1325 43697363 6F205669 72747561 6C205769
+  72656C65 7373204C 414E2043 6F6E7472 6F6C6C65 72308201 22300D06 092A8648
+  86F70D01 01010500 0382010F 00308201 0A028201 0100D677 26B33FBB 5DB99E52
+  5C3450E8 CDD771F2 591957CD 45D88FDE CE43A4C6 7772BAE8 87452B38 94D1602B
+  3C4D3AC4 9DC4D1C5 26CD4584 4D4E8C4A 84DBFDCB 4915A181 72826D06 9DDAE9CF
+  F5CD7412 F0286E6D 0F6845E9 709DAEAE 3A9D8724 52E6A333 10289FB5 5BFAA83F
+  FE4CAB96 77FA4673 1AF66B56 6EB5D191 866186FE 254059C1 373DB6F3 B17261E8
+  20549555 A4DF48B7 22212A78 2259B1FC A6CF5D8B D2ACE5EC AC4055B6 A8E7DFFD
+  8CBD9640 BF588149 B471B456 800D57DA 30ED4831 BC1DBBC0 B3E0591D BD18597E
+  0592E1B1 0AE5352A 2B6068BF 2479981B 521F7325 3AECEFDF 9E21BA8A 53B2453D
+  A1EEABAB 87CFEFBF 4D447F75 31E0A7C2 94C29697 926B0203 010001A3 63306130
+  0F060355 1D130101 FF040530 030101FF 300E0603 551D0F01 01FF0404 03020186
+  301F0603 551D2304 18301680 14740FF6 2FD86C06 ADC251A7 3B95087E 92D88FF2
+  66301D06 03551D0E 04160414 740FF62F D86C06AD C251A73B 95087E92 D88FF266
+  300D0609 2A864886 F70D0101 0B050003 82010100 C4C60F57 BF624445 81266F5B
+  AD4BED2D 85E0127D AF5FE62D 28F968E0 FEB6DE61 79FFB6C0 8CD1B85D B71A7E49
+  4B34B72F 8BEDB2E6 567E661D EA415783 53DBE8EA 62F99DCB 861A207A 99127F6C
+  6494DFDA 2BB99DB9 B1BE4319 87E24400 1869E383 A633FB72 D596B3E8 02EA1D69
+  D4AE467F C8B8E60A 0C4AEF9F 97947C51 59DDDC69 790E92B1 B5CFD7E4 E1EEB414
+  11490BF7 45E09331 6B41CB0B C72CCE0C 0A448AD0 7EAE664B 08C627D3 67B0876B
+  512B3C02 7267C9D7 A7B495E6 03F53F19 12395AD5 E49E6D4B C6A1A791 7A0B4BE0
+  D5003A9F 908AB6EB 3B013FB3 B75C6314 C01EAEA2 212A48E9 B46FAA80 0116393F
+  DECB38D1 E77BE658 1AD69019 7C8C9DD2 1CD2839B
+  	quit
+!
+!
+!
+!
+!
+!
+!
+!
+license udi pid C9800-CL-K9 sn 99TIQCVSI61
+diagnostic bootup level minimal
+memory free low-watermark processor 65535
+!
+!
+!
+username ssh_admin privilege 15 secret 9 $9$YSD81ryTTLwdGk$HfwJI2LhqpzYSQVKhc2jVARW9vjzOh3fMncWxQfa7mY
+user-name admin
+ creation-time 1715378373
+ privilege 15
+ password 0 Cisco123
+!
+redundancy
+ mode sso
+!
+!
+!
+!
+!
+!
+vlan internal allocation policy ascending
+!
+vlan 21
+!
+vlan 50
+ name palo-client-net50
+!
+vlan 78
+!
+!
+class-map match-any AVC-Reanchor-Class
+ match protocol cisco-jabber-audio
+ match protocol cisco-jabber-video
+ match protocol webex-media
+ match protocol webex-app-sharing
+ match protocol webex-control
+ match protocol webex-meeting
+ match protocol wifi-calling
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet1
+ no switchport
+ ip address dhcp
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet5
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+interface Vlan1
+ no ip address
+ no mop enabled
+ no mop sysid
+!
+interface Vlan21
+ description Client intern WLAN
+ ip address 10.0.21.99 255.255.255.0
+ no mop enabled
+ no mop sysid
+!
+interface Vlan78
+ ip address 10.0.78.99 255.255.255.0
+ no mop enabled
+ no mop sysid
+!
+interface Vlan100
+ ip address 10.0.100.99 255.255.255.0
+ no mop enabled
+ no mop sysid
+!
+ip forward-protocol nd
+ip http server
+ip http authentication local
+ip http secure-server
+!
+ip route 0.0.0.0 0.0.0.0 10.0.0.138
+ip route 10.0.20.0 255.255.255.0 10.0.21.15
+ip route 10.0.21.0 255.255.255.0 10.0.21.15
+ip route 10.0.50.0 255.255.255.0 10.78.0.15
+ip route 10.0.50.0 255.255.255.0 10.0.78.15
+ip route 10.0.77.0 255.255.255.0 10.0.77.15
+ip route 10.0.77.0 255.255.255.0 10.0.78.15
+ip route 10.0.100.0 255.255.255.0 10.0.78.15
+!
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+ stopbits 1
+line vty 0 4
+ logging synchronous
+ login local
+ length 0
+ transport input ssh
+line vty 5 15
+ login local
+ transport input ssh
+!
+call-home
+ ! If contact email address in call-home is configured as sch-smart-licensing@cisco.com
+ ! the email address configured in Cisco Smart License Portal will be used as contact email address to send SCH notifications.
+ contact-email-addr sch-smart-licensing@cisco.com
+ profile "CiscoTAC-1"
+  active
+  destination transport-method http
+ntp server pool.ntp.org
+!
+!
+!
+!
+!
+!
+wireless aaa policy default-aaa-policy
+wireless cts-sxp profile default-sxp-profile
+wireless management trustpoint 9800-1_WLC_TP
+wireless management interface Vlan78
+wireless profile airtime-fairness default-atf-policy 0
+wireless profile flex default-flex-profile
+ description "default flex profile"
+wireless profile mesh default-mesh-profile
+ description "default mesh profile"
+wireless profile multi-bssid default-multi-bssid-profile
+ description "Default multi bssid profile"
+wireless profile radio default-radio-profile
+ description "Preconfigured default radio profile"
+wireless profile policy AT-VK-01_WLANID_2
+ description AT-VK-01_NET_50
+ ipv4 flow monitor wireless-avc-basic input
+ ipv4 flow monitor wireless-avc-basic output
+ ipv6 flow monitor wireless-avc-basic-ipv6 input
+ ipv6 flow monitor wireless-avc-basic-ipv6 output
+ vlan VLAN0050
+ no shutdown
+wireless profile policy default-policy-profile
+ description AT-VK-01_NET_50
+ ipv4 flow monitor wireless-avc-basic input
+ ipv4 flow monitor wireless-avc-basic output
+ ipv6 flow monitor wireless-avc-basic-ipv6 input
+ ipv6 flow monitor wireless-avc-basic-ipv6 output
+ vlan palo-client-net50
+ no shutdown
+wireless tag site AT-VK-01
+ ap-profile AT-VK-01
+wireless tag site default-site-tag
+ description "default site tag"
+wireless tag policy AT-VK-01
+ wlan NET_50 policy default-policy-profile
+ wlan slu-intern policy default-policy-profile
+wireless tag policy default-policy-tag
+ description "default policy-tag"
+wireless tag rf AT-VK-01
+ 24ghz-rf-policy Typical_Client_Density_rf_24gh
+ 5ghz-rf-policy Typical_Client_Density_rf_5gh
+wireless tag rf default-rf-tag
+ description "default RF tag"
+wireless fabric control-plane default-control-plane
+wireless country AT
+wireless country US
+wlan NET_50 2 PaloFW_LAN50
+ security wpa psk set-key ascii 0 Sei8sam!
+ no security wpa akm dot1x
+ security wpa akm psk
+ no shutdown
+wlan slu-intern 1 slu-intern
+ radio policy dot11 24ghz
+ radio policy dot11 5ghz
+ security wpa psk set-key ascii 0 Sei8sam!
+ no security wpa akm dot1x
+ security wpa akm psk
+ no shutdown
+ap dot11 24ghz rf-profile Low_Client_Density_rf_24gh
+ coverage data rssi threshold -90
+ coverage level 2
+ coverage voice rssi threshold -90
+ description "pre configured Low Client Density rfprofile for 2.4gh radio"
+ high-density rx-sop threshold low
+ rate RATE_12M supported
+ rate RATE_24M supported
+ rate RATE_6M supported
+ tx-power v1 threshold -65
+ no shutdown
+ap dot11 24ghz rf-profile High_Client_Density_rf_24gh
+ description "pre configured High Client Density rfprofile for 2.4gh radio"
+ high-density rx-sop threshold medium
+ rate RATE_11M disable
+ rate RATE_12M mandatory
+ rate RATE_1M disable
+ rate RATE_24M supported
+ rate RATE_2M disable
+ rate RATE_5_5M disable
+ rate RATE_6M disable
+ tx-power min 7
+ no shutdown
+ap dot11 24ghz rf-profile Typical_Client_Density_rf_24gh
+ description "pre configured Typical Client Density rfprofile for 2.4gh radio"
+ rate RATE_11M disable
+ rate RATE_12M mandatory
+ rate RATE_1M disable
+ rate RATE_24M supported
+ rate RATE_2M disable
+ rate RATE_5_5M disable
+ rate RATE_6M disable
+ no shutdown
+ap dot11 24ghz rate RATE_12M supported
+ap dot11 24ghz rate RATE_24M supported
+ap dot11 24ghz rate RATE_6M supported
+ap dot11 6ghz rf-profile default-rf-profile-6ghz
+ description "default rfprofile for 6GHz radio"
+ rate RATE_12M mandatory
+ rate RATE_24M mandatory
+ rate RATE_6M mandatory
+ no shutdown
+ap dot11 5ghz rf-profile Low_Client_Density_rf_5gh
+ coverage data rssi threshold -90
+ coverage level 2
+ coverage voice rssi threshold -90
+ description "pre configured Low Client Density rfprofile for 5gh radio"
+ high-density rx-sop threshold low
+ rate RATE_12M mandatory
+ rate RATE_24M mandatory
+ rate RATE_6M mandatory
+ tx-power v1 threshold -60
+ no shutdown
+ap dot11 5ghz rf-profile High_Client_Density_rf_5gh
+ description "pre configured High Client Density rfprofile for 5gh radio"
+ high-density rx-sop threshold medium
+ rate RATE_12M mandatory
+ rate RATE_24M mandatory
+ rate RATE_6M disable
+ rate RATE_9M disable
+ tx-power min 7
+ tx-power v1 threshold -65
+ no shutdown
+ap dot11 5ghz rf-profile Typical_Client_Density_rf_5gh
+ description "pre configured Typical Density rfprofile for 5gh radio"
+ rate RATE_12M mandatory
+ rate RATE_24M mandatory
+ rate RATE_6M mandatory
+ no shutdown
+ap dot11 5ghz rate RATE_12M mandatory
+ap dot11 5ghz rate RATE_24M mandatory
+ap dot11 5ghz rate RATE_6M mandatory
+ap dot11 6ghz rrm monitor measurement 600
+ap country AT,US
+ap tag-source-priority 2 source filter
+ap tag-source-priority 3 source ap
+ap location name AT-VK-01
+ ap-eth-mac 00d7.8f88.c510
+ description "Homelab slu intern Client PSK"
+ tag policy AT-VK-01
+ tag rf AT-VK-01
+ tag site AT-VK-01
+ap profile AT-VK-01
+ap profile default-ap-profile
+ country AT
+ description "default ap profile"
+ ntp ip 0.0.0.0
+ syslog host 255.255.255.255
+ timezone use-controller
+trapflags ap crash
+trapflags ap noradiocards
+trapflags ap register
+end

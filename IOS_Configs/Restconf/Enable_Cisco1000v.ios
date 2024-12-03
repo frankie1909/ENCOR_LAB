@@ -1,0 +1,31 @@
+!enable Restconf
+configure terminal
+  ip http server
+  ip http secure-server
+  restconf
+end
+
+
+!create local User
+configure terminal
+  username <username> privilege 15 secret <password>
+end
+
+
+
+!verify restconf
+show ip http server status
+
+!optional restrict access
+configure terminal
+  ip access-list standard RESTCONF-ACCESS
+    permit <allowed-IP-address> <wildcard-mask>
+  exit
+  ip http access-class RESTCONF-ACCESS
+end
+
+!test rest-conf
+curl -k -u <username>:<password> https://10.200.254.30:443/restconf/data/
+
+
+

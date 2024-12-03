@@ -1,0 +1,174 @@
+SW1#show run
+Building configuration...
+
+*Nov 16 19:22:19.570: %SYS-5-CONFIG_I: Configured from console by console
+Current configuration : 3523 bytes
+!
+! Last configuration change at 19:22:19 UTC Sat Nov 16 2024
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname SW1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip cef
+no ipv6 cef
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+!
+!
+!
+!
+!
+!
+crypto isakmp policy 10
+ authentication pre-share
+ hash sha256
+ encryption aes
+ group 14
+
+crypto isakmp key CISCO123 address 44.44.44.44
+
+crypto ipsec transform-set AES_SHA esp-aes esp-sha-hmac
+ mode transport
+
+
+!
+!
+crypto map VPN 10 ipsec-isakmp
+ set peer 11.11.11.11
+ set transform-set IPSEC-TRANSFORM
+ match address IPSEC-GRE
+
+ip access-list extended IPSEC-GRE
+ permit gre host 10.14.1.44 host 10.14.1.11
+!
+!
+!
+!
+!
+interface Loopback1
+ ip address 11.11.11.11 255.255.255.255
+!
+interface Tunnel1
+ ip address 10.14.1.11 255.255.255.0
+ tunnel source 11.11.11.11
+ tunnel destination 44.44.44.44
+!
+interface GigabitEthernet0/0
+ no switchport
+ ip address 192.168.1.2 255.255.255.0
+ negotiation auto
+ crypto map VPN
+!
+interface GigabitEthernet0/1
+ negotiation auto
+!
+interface GigabitEthernet0/2
+ negotiation auto
+!
+interface GigabitEthernet0/3
+ negotiation auto
+!
+interface GigabitEthernet1/0
+ negotiation auto
+!
+interface GigabitEthernet1/1
+ negotiation auto
+!
+interface GigabitEthernet1/2
+ negotiation auto
+!
+interface GigabitEthernet1/3
+ negotiation auto
+!
+ip forward-protocol nd
+!
+ip http server
+!
+ip route 0.0.0.0 0.0.0.0 192.168.1.1
+ip ssh server algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+ip ssh client algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+!
+ip access-list extended IPSEC-GRE
+ permit gre host 10.14.1.11 host 10.14.1.44
+!
+!
+!
+!
+!
+control-plane
+!
+banner exec ^C
+IOSv - Cisco Systems Confidential -
+
+Supplemental End User License Restrictions
+
+This IOSv software is provided AS-IS without warranty of any kind. Under no circumstances may this software be used separate from the Cisco Modeling Labs Software that this software was provided with, or deployed or used as part of a production environment.
+
+By using the software, you agree to abide by the terms and conditions of the Cisco End User License Agreement at http://www.cisco.com/go/eula. Unauthorized use or distribution of this software is expressly prohibited.
+^C
+banner incoming ^C
+IOSv - Cisco Systems Confidential -
+
+Supplemental End User License Restrictions
+
+This IOSv software is provided AS-IS without warranty of any kind. Under no circumstances may this software be used separate from the Cisco Modeling Labs Software that this software was provided with, or deployed or used as part of a production environment.
+
+By using the software, you agree to abide by the terms and conditions of the Cisco End User License Agreement at http://www.cisco.com/go/eula. Unauthorized use or distribution of this software is expressly prohibited.
+^C
+banner login ^C
+IOSv - Cisco Systems Confidential -
+
+Supplemental End User License Restrictions
+
+This IOSv software is provided AS-IS without warranty of any kind. Under no circumstances may this software be used separate from the Cisco Modeling Labs Software that this software was provided with, or deployed or used as part of a production environment.
+
+By using the software, you agree to abide by the terms and conditions of the Cisco End User License Agreement at http://www.cisco.com/go/eula. Unauthorized use or distribution of this software is expressly prohibited.
+^C
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+!
+!
+end
+
+
+
+
+
+
+!
+!
+
+!
+!
+interface Tunnel0
+ ip address 10.0.0.3 255.255.255.0
+ ip mtu 1400
+ tunnel source 3.3.3.3
+ tunnel destination 192.168.12.1

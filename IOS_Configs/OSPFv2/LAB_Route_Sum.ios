@@ -1,0 +1,8 @@
+
+
+en
+conf t
+no ip domain lookup
+line con 0
+host R
+

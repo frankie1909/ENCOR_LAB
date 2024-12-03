@@ -1,0 +1,12 @@
+policy-map INBOUND-MARKING-POLICY
+  class VOIP-TELEPHONY
+    set dscp ef
+  class VIDEO
+    set dscp af31
+  class CONFERENCING
+    set dscp af41
+    set cos 4
+  class class-default
+    set dscp default
+    set cos 0
+
