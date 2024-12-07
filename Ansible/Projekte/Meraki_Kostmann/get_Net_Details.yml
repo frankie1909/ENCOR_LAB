@@ -1,0 +1,25 @@
+---
+# Notes: This playbook is designed to get your the Network ID of a network, simply change the name on line 14
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Get all networks
+      cisco.meraki.networks_info:
+        organizationId: "1546963"
+      register: result
+      tags:
+            - output
+
+    - name: Output Network ID for Network
+      ansible.builtin.debug:
+        msg: "{{ result | community.general.json_query('meraki_response[?name==`SLU_HomeOffice`].id') | join(', ') }}"
+        #The Network Name is Case Sensitive
+      tags:
+            - output
+    
+    - name: Show current results
+      ansible.builtin.debug:
+        msg: "{{ result }}"
+      tags:
+            - output 
