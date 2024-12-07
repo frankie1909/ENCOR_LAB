@@ -1,0 +1,19 @@
+enable
+conf t
+no ip domain-lookup
+line con 0 
+logg syn
+ip domain-name slu.int
+vlan 254
+name management
+int vlan 254
+ip add 10.200.254.211 255.255.255.0
+no shut
+host SW_
+user admin privilege 15 algorithm-type scrypt secret admin
+crypto key generate rsa modulus 2048
+ip ssh version 2
+line vty 0 4
+login local
+end
+wr
