@@ -13,6 +13,7 @@ host SW_
 user admin privilege 15 algorithm-type scrypt secret admin
 crypto key generate rsa modulus 2048
 ip ssh version 2
+! virtuel lines
 line vty 0 4
 login local
 end
